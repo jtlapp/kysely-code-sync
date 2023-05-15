@@ -8,7 +8,7 @@ import { exec } from 'child_process'
 import { promises as fsp } from 'fs'
 import { join } from 'path'
 
-const DIFFERENCER_PATH = join(__dirname, './show-diffs.js')
+const DIFFERENCER_PATH = join(__dirname, './check-copied-code.js')
 const EXPECTED_OUTPUT_PATH = join(__dirname, '../expected-output.txt')
 
 describe('show-diffs', () => {

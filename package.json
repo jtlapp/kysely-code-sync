@@ -1,49 +1,39 @@
 {
-  "name": "kysely-pg-client",
-  "version": "0.4.13",
+  "name": "kysely-code-sync",
+  "version": "0.1.0",
   "author": "Joseph T. Lapp <arachnojoe@gmail.com>",
   "license": "MIT",
-  "description": "Non-pooling single-connection Postgres dialect for Kysely",
+  "description": "Utility for keeping code segments and tests in sync with the Kysely repo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jtlapp/kysely-pg-client"
+    "url": "https://github.com/jtlapp/kysely-code-sync"
   },
   "keywords": [
     "kysely",
-    "postgres",
-    "postgresql",
-    "pg",
-    "client",
-    "connection",
     "dialect",
-    "serverless"
+    "extension",
+    "test",
+    "testing"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "source": "/index.ts",
+  "bin": {
+    "check-copied-code": "./dist/cjs/check-copied-code.js",
+    "load-kysely-tests": "./dist/cjs/load-kysely-tests.js"
+  },
   "files": [
     "dist/**"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "default": "./dist/cjs/index.js"
     }
   },
   "scripts": {
     "clean": "rm -rf node_modules & rm -rf dist & rm -rf test/node/dist",
     "format": "prettier --write \"**/*.{js,ts,tsx,md}\"",
-    "build": "rm -rdf dist && tsc && tsc -p tsconfig-cjs.json",
-    "diffs": "node test/util/dist/differencer.js",
-    "test": "npm run build && npm run test:build && npm run test:util && npm run test:node",
-    "test:build": "rm -rdf test/util/dist && rm -rdf test/node/dist && tsc -p test/util && npm run test:install && tsc -p test/node",
-    "test:util": "mocha --timeout 15000 test/util/dist/**/*.test.js",
-    "test:install": "rm -rdf test/node/src/temp && node test/util/dist/install-tests.js",
-    "test:node": "DIALECT=postgres mocha --timeout 15000 'test/node/dist/**/*.test.js'"
+    "build": "rm -rdf dist && tsc",
+    "test": "npm run build && rm -rdf test/node/src/temp && mocha --timeout 5000 'src/**/*.test.js'"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.5",

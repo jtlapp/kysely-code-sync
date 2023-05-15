@@ -3,7 +3,7 @@ import { join } from 'path'
 
 import { BASE_KYSELY_RAW_URL } from './constants.js'
 
-const CONFIG_FILE_NAME = 'kysely-tester-config.json'
+const CONFIG_FILE_NAME = 'code-sync.json'
 const KYSELY_SOURCE_DIR = '../../node/src/temp'
 const CUSTOM_SETUP_FILE = '../custom-test-setup.js'
 
