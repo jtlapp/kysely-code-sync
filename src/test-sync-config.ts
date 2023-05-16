@@ -33,21 +33,28 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       : CONFIG_FILE_NAME;
     const absoluteConfigPath = path.join(process.cwd(), relativeConfigPath);
 
-    const configText = await fsp.readFile(absoluteConfigPath, 'utf-8');
-    config = JSON.parse(configText);
+    try {
+      const configText = await fsp.readFile(absoluteConfigPath, 'utf-8');
+      config = JSON.parse(configText);
+    } catch (e: any) {
+      if (e.code !== 'ENOENT') throw e;
+      throw new InvalidConfigException(
+        `Config file not found: ${relativeConfigPath}`
+      );
+    }
 
     if (!config.copyDirs && !config.testFiles) {
-      throw new Error(
+      throw new InvalidConfigException(
         `${relativeConfigPath} must provide at least one of 'copyDirs' and 'testFiles'`
       );
     }
     if (config.testFiles && !config.downloadedTestsDir) {
-      throw new Error(
+      throw new InvalidConfigException(
         `${relativeConfigPath} must provide 'downloadedTestsDir' for 'testFiles'`
       );
     }
     if (config.testFiles && !config.customSetupFile) {
-      throw new Error(
+      throw new InvalidConfigException(
         `${relativeConfigPath} must provide 'customSetupFile' for 'testFiles'`
       );
     }
@@ -66,6 +73,12 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
     );
   }
   return config;
+}
+
+export class InvalidConfigException extends Error {
+  constructor(message: string) {
+    super(message);
+  }
 }
 
 function appendSlash(dir: string | undefined, defaultDir: string): string {

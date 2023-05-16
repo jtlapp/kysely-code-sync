@@ -50,4 +50,33 @@ describe('load-kysely-tests', () => {
       expect(actualText).to.equal(expectedText);
     }
   });
+
+  it('should error on invalid configurations', async () => {
+    const testConfigDir = join(TEST_DIR_NAME, 'test-config-files');
+
+    let err = await runCommand(join(testConfigDir, 'empty.json'));
+    expect(err).to.contain(
+      "must provide at least one of 'copyDirs' and 'testFiles'"
+    );
+
+    err = await runCommand(join(testConfigDir, 'no-testFiles.json'));
+    expect(err).to.contain("Config file doesn't provide 'testFiles'");
+
+    err = await runCommand(join(testConfigDir, 'no-customSetupFile.json'));
+    expect(err).to.contain("must provide 'customSetupFile'");
+
+    err = await runCommand(join(testConfigDir, 'no-downloadedTestsDir.json'));
+    expect(err).to.contain("must provide 'downloadedTestsDir'");
+  });
 });
+
+async function runCommand(configFile?: string) {
+  const command = configFile
+    ? `node ${COMMAND_PATH} --config=${configFile}`
+    : `node ${COMMAND_PATH}`;
+  return new Promise<string>((resolve) => {
+    exec(command, (err: any, _stdout, stderr) => {
+      resolve(err ? err.message : stderr);
+    });
+  });
+}

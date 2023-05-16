@@ -1,7 +1,11 @@
 import { promises as fsp } from 'fs';
 import * as path from 'path';
 
-import { TestSyncConfig, getConfig } from './test-sync-config.js';
+import {
+  InvalidConfigException,
+  TestSyncConfig,
+  getConfig,
+} from './test-sync-config.js';
 
 const ADAPTED_FROM_REGEX = /Adapted from ([^\s]+)/i;
 const BEGIN_UNCHANGED_LABEL = 'BEGIN COPIED CODE';
@@ -9,10 +13,20 @@ const END_UNCHANGED_LABEL = 'END COPIED CODE';
 
 let differingCodeSegments = 0;
 
-async function diffSourceFiles(): Promise<void> {
+(async () => {
+  try {
+    await diffCopiedCode();
+  } catch (e: any) {
+    if (!(e instanceof InvalidConfigException)) throw e;
+    console.error(`Failed to difference copied code\n${e.message}\n`);
+    process.exit(1);
+  }
+})();
+
+async function diffCopiedCode(): Promise<void> {
   const config = await getConfig();
   if (!config.copyDirs) {
-    throw Error("Config file doesn't provide 'copyDirs'");
+    throw new InvalidConfigException("Config file doesn't provide 'copyDirs'");
   }
 
   for (const dir of config.copyDirs) {
@@ -43,7 +57,9 @@ function createSourceTargetURL(config: TestSyncConfig, url: string): string {
       config.__baseCopyRawUrl + url.substring(config.__baseCopyRefUrl.length)
     );
   }
-  throw Error(`URL doesn't start with ${config.__baseCopyRefUrl}`);
+  throw new InvalidConfigException(
+    `URL doesn't start with ${config.__baseCopyRefUrl}`
+  );
 }
 
 async function* iterateOverTSFiles(dir: string): AsyncGenerator<string> {
@@ -122,7 +138,9 @@ function findEndOfUnchangedLines(lines: string[], index: number): number {
       return i;
     }
   }
-  throw Error(`Couldn't find matching ${END_UNCHANGED_LABEL} comment`);
+  throw new InvalidConfigException(
+    `Couldn't find matching ${END_UNCHANGED_LABEL} comment`
+  );
 }
 
 function findFirstDifferingLine(
@@ -152,5 +170,3 @@ function findFirstDifferingLine(
   }
   return lastDifferentLineIndex;
 }
-
-(async () => diffSourceFiles())();

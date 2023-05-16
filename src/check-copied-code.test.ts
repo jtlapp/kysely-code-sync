@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 import { promises as fsp } from 'fs';
 import { join } from 'path';
 
-import { CONFIG_FILE_NAME } from './test-sync-config.js';
+import { CONFIG_FILE_NAME, getConfig } from './test-sync-config.js';
 
 const COMMAND_PATH = join(__dirname, './check-copied-code.js');
 const TEST_DIR_NAME = 'test';
@@ -41,4 +41,34 @@ describe('check-copied-code', () => {
     const expectedOutput = await fsp.readFile(EXPECTED_DIFFS_PATH, 'utf-8');
     expect(stderr).to.equal(expectedOutput);
   });
+
+  it('should error on invalid configurations', async () => {
+    const testConfigDir = join(TEST_DIR_NAME, 'test-config-files');
+
+    let err = await runCommand();
+    expect(err).to.contain('Config file not found');
+
+    err = await runCommand('invalid-config.json');
+    expect(err).to.contain('Config file not found');
+
+    err = await runCommand(join(testConfigDir, 'no-copyDirs.json'));
+    expect(err).to.contain("Config file doesn't provide 'copyDirs'");
+
+    try {
+      await getConfig(join(testConfigDir, 'valid-for-kysely.json'));
+    } catch (e: any) {
+      expect(true).to.equal(false, 'Unexpected error: ' + e.message);
+    }
+  });
 });
+
+async function runCommand(configFile?: string) {
+  const command = configFile
+    ? `node ${COMMAND_PATH} --config=${configFile}`
+    : `node ${COMMAND_PATH}`;
+  return new Promise<string>((resolve) => {
+    exec(command, (err: any, _stdout, stderr) => {
+      resolve(err ? err.message : stderr);
+    });
+  });
+}

@@ -1,20 +1,18 @@
 import { promises as fsp } from 'fs';
 import { join } from 'path';
 
-// TODO: pretty error output
-// TODO: test command errors
-// TODO: precede test config items with underscore
-
-import { TestSyncConfig, getConfig } from './test-sync-config.js';
+import {
+  TestSyncConfig,
+  getConfig,
+  InvalidConfigException,
+} from './test-sync-config.js';
 
 (async () => {
   try {
-    installKyselyTests();
+    await installKyselyTests();
   } catch (e: any) {
-    if (!(e instanceof InvalidConfigException)) {
-      throw e;
-    }
-    console.error(`Failed to install Kysely tests: ${e.message}`);
+    if (!(e instanceof InvalidConfigException)) throw e;
+    console.error(`Failed to install Kysely tests\n${e.message}\n`);
     process.exit(1);
   }
 })();
@@ -22,7 +20,7 @@ import { TestSyncConfig, getConfig } from './test-sync-config.js';
 async function installKyselyTests() {
   const config = await getConfig();
   if (!config.testFiles) {
-    throw Error("Config file doesn't provide 'testFiles'");
+    throw new InvalidConfigException("Config file doesn't provide 'testFiles'");
   }
 
   const kyselySourceDir = join(process.cwd(), config.downloadedTestsDir);
@@ -87,10 +85,4 @@ function tweakKyselySource(
     }
   }
   return source;
-}
-
-class InvalidConfigException extends Error {
-  constructor(message: string) {
-    super(message);
-  }
 }
