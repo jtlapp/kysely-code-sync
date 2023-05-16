@@ -23,10 +23,12 @@ export interface TestSyncConfig {
   customSetupFile: string;
 }
 
-export async function getConfig(): Promise<TestSyncConfig> {
+export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
   if (!config) {
     const configArg = process.argv.filter((arg) => arg.startsWith(CONFIG_ARG));
-    const relativeConfigPath = configArg[0]
+    const relativeConfigPath = configFile
+      ? configFile
+      : configArg[0]
       ? configArg[0].substring(CONFIG_ARG.length)
       : CONFIG_FILE_NAME;
     const absoluteConfigPath = path.join(process.cwd(), relativeConfigPath);

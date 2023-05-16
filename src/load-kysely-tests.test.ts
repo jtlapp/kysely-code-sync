@@ -13,7 +13,7 @@ const EXPECTED_TESTS_PATH = join(TEST_DIR, 'expected-tests');
 
 describe('load-kysely-tests', () => {
   it('should produce the expected test files', async () => {
-    const config = await getConfig();
+    const config = await getConfig(TEST_CONFIG_FILE);
     const downloadPath = join(process.cwd(), config.downloadedTestsDir);
 
     const command = `node ${COMMAND_PATH} --config=${TEST_CONFIG_FILE}`;

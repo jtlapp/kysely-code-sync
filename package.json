@@ -28,10 +28,10 @@
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules & rm -rf dist & rm -rf test/node/dist",
+    "clean": "rm -rf node_modules & rm -rf dist",
     "format": "prettier --write \"**/*.{js,ts,tsx,md}\"",
     "build": "rm -rdf dist && tsc",
-    "test": "npm run build && rm -rdf test/node/src/temp && mocha --timeout 5000 'dist/**/*.test.js'"
+    "test": "npm run build && mocha --timeout 5000 'dist/**/*.test.js'"
   },
   "dependencies": {},
   "devDependencies": {

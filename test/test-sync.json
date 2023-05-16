@@ -6,7 +6,7 @@
     "test-1": ["should do something 1A", "should do something 1C"],
     "test-2": []
   },
-  "baseTestRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files",
+  "baseTestRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-tests",
   "downloadedTestsDir": "test/temp",
   "customSetupFile": "../custom-test-setup.js"
 }
