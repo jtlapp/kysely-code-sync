@@ -36,12 +36,14 @@ async function diffSourceFiles(): Promise<void> {
 }
 
 function createSourceTargetURL(config: TestSyncConfig, url: string): string {
-  if (url.startsWith(config.baseCopyRawUrl)) {
+  if (url.startsWith(config.__baseCopyRawUrl)) {
     return url;
-  } else if (url.startsWith(config.baseCopyRefUrl)) {
-    return config.baseCopyRawUrl + url.substring(config.baseCopyRefUrl.length);
+  } else if (url.startsWith(config.__baseCopyRefUrl)) {
+    return (
+      config.__baseCopyRawUrl + url.substring(config.__baseCopyRefUrl.length)
+    );
   }
-  throw Error(`URL doesn't start with ${config.baseCopyRefUrl}`);
+  throw Error(`URL doesn't start with ${config.__baseCopyRefUrl}`);
 }
 
 async function* iterateOverTSFiles(dir: string): AsyncGenerator<string> {

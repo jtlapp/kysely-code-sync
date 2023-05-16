@@ -14,9 +14,9 @@ const DEFAULT_BASE_TEST_RAW_URL =
 let config: TestSyncConfig;
 
 export interface TestSyncConfig {
-  baseCopyRefUrl: string;
-  baseCopyRawUrl: string;
-  baseTestRawUrl: string;
+  __baseCopyRefUrl: string;
+  __baseCopyRawUrl: string;
+  __baseTestRawUrl: string;
   copyDirs: string[];
   testFiles: Record<string, string[]>;
   downloadedTestsDir: string;
@@ -52,23 +52,23 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       );
     }
 
-    config.baseCopyRefUrl = appendSlash(
-      config.baseCopyRefUrl,
+    config.__baseCopyRefUrl = appendSlash(
+      config.__baseCopyRefUrl,
       DEFAULT_BASE_COPY_REF_URL
     );
-    config.baseCopyRawUrl = appendSlash(
-      config.baseCopyRawUrl,
+    config.__baseCopyRawUrl = appendSlash(
+      config.__baseCopyRawUrl,
       DEFAULT_BASE_COPY_RAW_URL
     );
-    config.baseTestRawUrl = appendSlash(
-      config.baseTestRawUrl,
+    config.__baseTestRawUrl = appendSlash(
+      config.__baseTestRawUrl,
       DEFAULT_BASE_TEST_RAW_URL
     );
   }
   return config;
 }
 
-function appendSlash(dir: string, defaultDir: string): string {
+function appendSlash(dir: string | undefined, defaultDir: string): string {
   dir ??= defaultDir;
   return dir.endsWith('/') ? dir : dir + '/';
 }
