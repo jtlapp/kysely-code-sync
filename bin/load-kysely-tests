@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-node dist/cjs/load-kysely-tests.js "$@"
-
