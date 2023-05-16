@@ -3,7 +3,7 @@ import * as path from 'path';
 
 export const CONFIG_FILE_NAME = 'test-sync.json';
 
-const configFilePath = path.join(process.cwd(), CONFIG_FILE_NAME);
+const CONFIG_ARG = '--config=';
 const DEFAULT_BASE_REFERENCE_URL =
   'https://github.com/kysely-org/kysely/blob/master/';
 const DEFAULT_BASE_RAW_URL =
@@ -20,13 +20,20 @@ export interface TestSyncConfig {
 
 export async function getConfig(): Promise<TestSyncConfig> {
   if (!config) {
-    const configText = await fsp.readFile(configFilePath, 'utf-8');
+    const configArg = process.argv.filter((arg) => arg.startsWith(CONFIG_ARG));
+    const relativeConfigPath = configArg[0]
+      ? configArg[0].substring(CONFIG_ARG.length)
+      : CONFIG_FILE_NAME;
+    const absoluteConfigPath = path.join(process.cwd(), relativeConfigPath);
+
+    const configText = await fsp.readFile(absoluteConfigPath, 'utf-8');
     config = JSON.parse(configText);
     if (!config.copyDirs && !config.testFiles) {
       throw new Error(
-        `${CONFIG_FILE_NAME} must provide at least one of 'copyDirs' and 'testFiles'`
+        `${relativeConfigPath} must provide at least one of 'copyDirs' and 'testFiles'`
       );
     }
+
     config.baseRefUrl ??= DEFAULT_BASE_REFERENCE_URL;
     config.baseRawUrl ??= DEFAULT_BASE_RAW_URL;
   }

@@ -33,7 +33,9 @@ async function diffSourceFiles(): Promise<void> {
 }
 
 function createSourceTargetURL(config: TestSyncConfig, url: string): string {
-  if (!url.startsWith(config.baseRefUrl)) {
+  if (url.startsWith(config.baseRefUrl)) {
+    return url;
+  } else if (!url.startsWith(config.baseRawUrl)) {
     throw Error(`URL doesn't start with ${config.baseRefUrl}`);
   }
   return config.baseRawUrl + url.substring(config.baseRefUrl.length);

@@ -1,4 +1,4 @@
-/** Adapted from https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files/subdir/local-4.ts */
+/** Adapted from https://github.com/jtlapp/kysely-test-sync/blob/main/test/mock-kysely-files/subdir/local-4.ts */
 
 /* BEGIN COPIED CODE */
 export const A4_different = 1;
