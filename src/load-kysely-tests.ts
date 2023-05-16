@@ -77,7 +77,7 @@ function tweakKyselySource(
   // Call `reportMochaContext` from each `describe` block.
 
   const DESCRIBE_START_REGEX = /[ \t\n]describe\(/gm;
-  const DESCRIBE_END_OF_OPENING = '{';
+  const DESCRIBE_END_OF_OPENING = '{\n';
   const describeMatches = source.matchAll(DESCRIBE_START_REGEX);
   // replace in reverse order to avoid changing offsets
   const reverseMatches = [...describeMatches].reverse();
@@ -91,10 +91,9 @@ function tweakKyselySource(
       DESCRIBE_END_OF_OPENING.length;
     source =
       source.substring(0, endOfOpeningOffset) +
-      '\n' +
       `${indent}  beforeEach(function () {\n` +
       `${indent}    reportMochaContext(this);\n` +
-      `${indent}  });\n` +
+      `${indent}  });\n\n` +
       source.substring(endOfOpeningOffset);
   }
 

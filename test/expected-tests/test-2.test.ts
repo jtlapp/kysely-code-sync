@@ -25,7 +25,8 @@ describe('suite 2', () => {
     });
   });
 
-  describe('suite 2.2', () => {
+  const suite = 'suite';
+  describe(`${suite} 2.2`, function () {
     beforeEach(function () {
       reportMochaContext(this);
     });
