@@ -44,7 +44,9 @@ async function diffCopiedCode(): Promise<void> {
   }
 
   if (differingCodeSegments > 0) {
-    console.error(`\n${differingCodeSegments} differing code segments found`);
+    console.error(
+      `\n${differingCodeSegments} copied code segments differ from their Kysely source`
+    );
     process.exit(1);
   }
 }
