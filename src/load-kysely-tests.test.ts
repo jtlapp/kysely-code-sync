@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
 import { promises as fsp } from 'fs';
 import { join } from 'path';
 
@@ -15,9 +15,21 @@ describe('load-kysely-tests', () => {
   it('should produce the expected test files', async () => {
     const config = await getConfig(TEST_CONFIG_FILE);
     const downloadPath = join(process.cwd(), config.downloadedTestsDir);
+    try {
+      // Ensure that the download path starts empty.
+      await fsp.rm(downloadPath, { recursive: true });
+    } catch (e: any) {
+      if (e.code !== 'ENOENT') throw e;
+    }
 
     const command = `node ${COMMAND_PATH} --config=${TEST_CONFIG_FILE}`;
-    execSync(command);
+    await new Promise<void>((resolve) => {
+      exec(command, (err: any, _stdout, stderr) => {
+        expect(err).to.be.null;
+        expect(stderr).to.be.empty;
+        resolve();
+      });
+    });
 
     const expectedFiles = await fsp.readdir(EXPECTED_TESTS_PATH);
     expectedFiles.sort();
