@@ -1,0 +1,10 @@
+export const A4 = 1;
+export const B4 = 2;
+export const C4 = 3;
+export const D4 = 4;
+export const E4 = 5;
+export const F4 = 6;
+export const G4 = 7;
+export const H4 = 8;
+export const I4 = 9;
+export const J4 = 10;

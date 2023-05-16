@@ -1,5 +1,8 @@
 {
-  "test-files": {
+  "baseRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
+  "baseRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
+  "copyDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
+  "testFiles": {
     "delete": [],
     "execute": [],
     "insert": [],

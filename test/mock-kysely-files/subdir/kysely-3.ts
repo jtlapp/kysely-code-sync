@@ -1,0 +1,10 @@
+export const A3 = 1;
+export const B3 = 2;
+export const C3 = 3;
+export const D3 = 4;
+export const E3 = 5;
+export const F3 = 6;
+export const G3 = 7;
+export const H3 = 8;
+export const I3 = 9;
+export const J3 = 10;

@@ -1,0 +1,15 @@
+/* Adapted from https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files/local-2.ts */
+export const A2x = 1;
+/* BEGIN COPIED CODE */
+export const B2 = 2;
+export const C2 = 3;
+/* END COPIED CODE */
+export const D2x = 4;
+export const E2x = 5;
+export const F2x = 6;
+/* BEGIN COPIED CODE */
+export const G2 = 7;
+export const H2 = 8;
+export const I2 = 9;
+export const J2 = 10;
+/* END COPIED CODE */

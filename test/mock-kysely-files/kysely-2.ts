@@ -1,0 +1,10 @@
+export const A2 = 1;
+export const B2 = 2;
+export const C2 = 3;
+export const D2 = 4;
+export const E2 = 5;
+export const F2 = 6;
+export const G2 = 7;
+export const H2 = 8;
+export const I2 = 9;
+export const J2 = 10;

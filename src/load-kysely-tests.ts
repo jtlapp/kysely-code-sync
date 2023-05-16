@@ -1,13 +1,11 @@
 import { promises as fsp } from 'fs';
 import { join } from 'path';
 
-import { BASE_KYSELY_RAW_URL } from './constants.js';
+import { getConfig } from './test-sync-config.js';
 
-const CONFIG_FILE_NAME = 'test-sync.json';
 const KYSELY_SOURCE_DIR = '../../node/src/temp';
 const CUSTOM_SETUP_FILE = '../custom-test-setup.js';
 
-type Config = { ['test-files']: Record<string, string[]> };
 (async () => {
   try {
     installKyselyTests();
@@ -21,17 +19,13 @@ type Config = { ['test-files']: Record<string, string[]> };
 })();
 
 async function installKyselyTests() {
-  const configFilePath = join(__dirname, '..', CONFIG_FILE_NAME);
-  const config: Config = JSON.parse(
-    await fsp.readFile(configFilePath, 'utf-8')
-  );
-
+  const config = await getConfig();
   const kyselySourceDir = join(__dirname, KYSELY_SOURCE_DIR);
   await fsp.mkdir(kyselySourceDir);
 
-  for (const fileEntry of Object.entries(config['test-files'])) {
+  for (const fileEntry of Object.entries(config.testFiles)) {
     const fileName = `${fileEntry[0]}.test.ts`;
-    const url = `${BASE_KYSELY_RAW_URL}test/node/src/${fileName}`;
+    const url = `${config.baseRawUrl}test/node/src/${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);
     const response = await fetch(url);
     const kyselySource = tweakKyselySource(
