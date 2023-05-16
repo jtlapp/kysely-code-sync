@@ -70,30 +70,31 @@ function tweakKyselySource(
   if (importStartOffset >= 0) {
     source =
       source.substring(0, importStartOffset) +
-      `import { reportMochaContext } from '${config.customSetupFile}'\n` +
+      `import { reportMochaContext } from '${config.customSetupFile}';\n` +
       source.substring(importStartOffset);
   }
 
   // Call `reportMochaContext` from each `describe` block.
 
-  const DESCRIBE_START_REGEX = /[\w]+describe\(/g;
-  const DESCRIBE_END_OF_OPENING = '() => {';
+  const DESCRIBE_START_REGEX = /[ \t\n]describe\(/gm;
+  const DESCRIBE_END_OF_OPENING = '{';
   const describeMatches = source.matchAll(DESCRIBE_START_REGEX);
-  for (const match of describeMatches) {
+  // replace in reverse order to avoid changing offsets
+  const reverseMatches = [...describeMatches].reverse();
+  for (const match of reverseMatches) {
     const describeStartOffset = match.index! + 1;
-    const endOfOpeningOffset = source.indexOf(
-      DESCRIBE_END_OF_OPENING,
-      describeStartOffset
-    );
-    let endOfPriorLine = source.lastIndexOf('\n', describeStartOffset);
-    if (endOfPriorLine == -1) endOfPriorLine = 0;
+    const endOfPriorLine =
+      source.lastIndexOf('\n', describeStartOffset + 1) + 1;
     const indent = source.substring(endOfPriorLine, describeStartOffset);
+    const endOfOpeningOffset =
+      source.indexOf(DESCRIBE_END_OF_OPENING, describeStartOffset) +
+      DESCRIBE_END_OF_OPENING.length;
     source =
       source.substring(0, endOfOpeningOffset) +
       '\n' +
-      `${indent}beforeEach(function () {` +
-      `${indent}  reportMochaContext(this)` +
-      `${indent});\n` +
+      `${indent}  beforeEach(function () {\n` +
+      `${indent}    reportMochaContext(this);\n` +
+      `${indent}  });\n` +
       source.substring(endOfOpeningOffset);
   }
 
