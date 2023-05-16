@@ -1,8 +1,3 @@
-/**
- * Tests the differencer utility. Runs `dist/differencer.js`, mocking fetch
- * URLs, capturing the error, and comparing to the expected output.
- */
-
 import { expect } from 'chai';
 import { exec } from 'child_process';
 import { promises as fsp } from 'fs';
