@@ -5,7 +5,7 @@
   "copyDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
   "testFiles": {
     "test-1": ["should do something 1A", "should do something 1C"],
-    "test-2": []
+    "test-2": ["should do something 2.1B"]
   },
   "downloadedTestsDir": "test/temp",
   "customSetupFile": "../custom-test-setup.js"

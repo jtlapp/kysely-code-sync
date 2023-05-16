@@ -6,11 +6,19 @@ describe('suite 2', () => {
     // ...
   });
 
-  it('should do something 2B', () => {
-    // ...
+  describe('suite 2.1', () => {
+    it('should do something 2.1A', () => {
+      // ...
+    });
+
+    it('should do something 2.1B', () => {
+      // ...
+    });
   });
 
-  it('should do something 2C', () => {
-    // ...
+  describe('suite 2.2', () => {
+    it('should do something 2.2A', () => {
+      // ...
+    });
   });
 });

@@ -1,16 +1,37 @@
+import { reportMochaContext } from '../custom-test-setup.js';
 import { Something } from 'kysely';
 import { setup } from '../custom-test-setup.js';
 
 describe('suite 2', () => {
+  beforeEach(function () {
+    reportMochaContext(this);
+  });
+
   it('should do something 2A', () => {
     // ...
   });
 
-  it('should do something 2B', () => {
-    // ...
+  describe('suite 2.1', () => {
+    beforeEach(function () {
+      reportMochaContext(this);
+    });
+
+    it('should do something 2.1A', () => {
+      // ...
+    });
+
+    it.skip('should do something 2.1B', () => {
+      // ...
+    });
   });
 
-  it('should do something 2C', () => {
-    // ...
+  describe('suite 2.2', () => {
+    beforeEach(function () {
+      reportMochaContext(this);
+    });
+
+    it('should do something 2.2A', () => {
+      // ...
+    });
   });
 });

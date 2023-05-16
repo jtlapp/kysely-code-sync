@@ -55,9 +55,50 @@ function tweakKyselySource(
   source: string,
   excludedTests: string[]
 ): string {
-  source = source
-    .replaceAll(/from '\.\.[./]*'/g, (match) => "from 'kysely'")
-    .replaceAll('./test-setup.js', config.customSetupFile);
+  // Import from kysely.
+
+  source = source.replaceAll(/from '\.\.[./]*'/g, (match) => "from 'kysely'");
+
+  // Use the custom test setup.
+
+  source = source.replaceAll('./test-setup.js', config.customSetupFile);
+
+  // Add an import for `reportMochaContext` from the custom setup.
+
+  const IMPORT_START = 'import ';
+  const importStartOffset = source.indexOf(IMPORT_START);
+  if (importStartOffset >= 0) {
+    source =
+      source.substring(0, importStartOffset) +
+      `import { reportMochaContext } from '${config.customSetupFile}'\n` +
+      source.substring(importStartOffset);
+  }
+
+  // Call `reportMochaContext` from each `describe` block.
+
+  const DESCRIBE_START_REGEX = /[\w]+describe\(/g;
+  const DESCRIBE_END_OF_OPENING = '() => {';
+  const describeMatches = source.matchAll(DESCRIBE_START_REGEX);
+  for (const match of describeMatches) {
+    const describeStartOffset = match.index! + 1;
+    const endOfOpeningOffset = source.indexOf(
+      DESCRIBE_END_OF_OPENING,
+      describeStartOffset
+    );
+    let endOfPriorLine = source.lastIndexOf('\n', describeStartOffset);
+    if (endOfPriorLine == -1) endOfPriorLine = 0;
+    const indent = source.substring(endOfPriorLine, describeStartOffset);
+    source =
+      source.substring(0, endOfOpeningOffset) +
+      '\n' +
+      `${indent}beforeEach(function () {` +
+      `${indent}  reportMochaContext(this)` +
+      `${indent});\n` +
+      source.substring(endOfOpeningOffset);
+  }
+
+  // Skip excluded tests.
+
   for (const excludedTest of excludedTests) {
     const TEST_START = 'it(';
     const testNameOffset = source.indexOf(excludedTest);
