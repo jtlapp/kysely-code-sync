@@ -43,7 +43,9 @@ async function diffCopiedCode(): Promise<void> {
     }
   }
 
-  if (differingCodeSegments > 0) {
+  if (differingCodeSegments == 0) {
+    console.log("All synced code segments match Kysely's source.\n");
+  } else {
     console.error(
       `\n${differingCodeSegments} synced code segments differ from their Kysely source`
     );

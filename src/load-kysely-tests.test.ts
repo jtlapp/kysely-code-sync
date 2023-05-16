@@ -8,7 +8,10 @@ import { CONFIG_FILE_NAME, getConfig } from './test-sync-config.js';
 const COMMAND_PATH = join(__dirname, './load-kysely-tests.js');
 const TEST_DIR_NAME = 'test';
 const TEST_DIR = join(process.cwd(), TEST_DIR_NAME);
-const TEST_CONFIG_FILE = join(TEST_DIR_NAME, CONFIG_FILE_NAME);
+const TEST_CONFIG_FILE = join(
+  TEST_DIR_NAME,
+  'test-config-files/test-sync-1.json'
+);
 const EXPECTED_TESTS_PATH = join(TEST_DIR, 'expected-tests');
 
 describe('load-kysely-tests', () => {
