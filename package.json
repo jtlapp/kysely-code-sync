@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Joseph T. Lapp <arachnojoe@gmail.com>",
   "license": "MIT",
-  "description": "Utility for keeping tests and code segments in sync with the Kysely repo",
+  "description": "Utility for keeping code and tests in sync with the Kysely repo",
   "repository": {
     "type": "git",
     "url": "https://github.com/jtlapp/kysely-test-sync"
