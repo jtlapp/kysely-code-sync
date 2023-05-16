@@ -11,6 +11,9 @@ let differingCodeSegments = 0;
 
 async function diffSourceFiles(): Promise<void> {
   const config = await getConfig();
+  if (!config.copyDirs) {
+    throw Error("Config file doesn't provide 'copyDirs'");
+  }
 
   for (const dir of config.copyDirs) {
     const dirPath = path.join(process.cwd(), dir);
@@ -33,12 +36,12 @@ async function diffSourceFiles(): Promise<void> {
 }
 
 function createSourceTargetURL(config: TestSyncConfig, url: string): string {
-  if (url.startsWith(config.baseRawUrl)) {
+  if (url.startsWith(config.baseCopyRawUrl)) {
     return url;
-  } else if (url.startsWith(config.baseRefUrl)) {
-    return config.baseRawUrl + url.substring(config.baseRefUrl.length);
+  } else if (url.startsWith(config.baseCopyRefUrl)) {
+    return config.baseCopyRawUrl + url.substring(config.baseCopyRefUrl.length);
   }
-  throw Error(`URL doesn't start with ${config.baseRefUrl}`);
+  throw Error(`URL doesn't start with ${config.baseCopyRefUrl}`);
 }
 
 async function* iterateOverTSFiles(dir: string): AsyncGenerator<string> {
