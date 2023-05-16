@@ -1,4 +1,4 @@
-/* Adapted from https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files/local-2.ts */
+/* Adapted from https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files/kysely-2.ts */
 export const A2x = 1;
 /* BEGIN COPIED CODE */
 export const B2 = 2;

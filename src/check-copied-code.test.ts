@@ -28,6 +28,7 @@ describe('show-diffs', () => {
         );
       });
     });
+    stderr = stderr.trim();
 
     // Sort the output for proper comparison with expected output.
     if (stderr.length > 0) {

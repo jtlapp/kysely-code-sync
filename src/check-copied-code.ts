@@ -4,8 +4,8 @@ import * as path from 'path';
 import { TestSyncConfig, getConfig } from './test-sync-config.js';
 
 const ADAPTED_FROM_REGEX = /Adapted from ([^\s]+)/i;
-const BEGIN_UNCHANGED_LABEL = 'BEGIN UNCHANGED CODE';
-const END_UNCHANGED_LABEL = 'END UNCHANGED CODE';
+const BEGIN_UNCHANGED_LABEL = 'BEGIN COPIED CODE';
+const END_UNCHANGED_LABEL = 'END COPIED CODE';
 
 let differingCodeSegments = 0;
 
@@ -33,12 +33,12 @@ async function diffSourceFiles(): Promise<void> {
 }
 
 function createSourceTargetURL(config: TestSyncConfig, url: string): string {
-  if (url.startsWith(config.baseRefUrl)) {
+  if (url.startsWith(config.baseRawUrl)) {
     return url;
-  } else if (!url.startsWith(config.baseRawUrl)) {
-    throw Error(`URL doesn't start with ${config.baseRefUrl}`);
+  } else if (url.startsWith(config.baseRefUrl)) {
+    return config.baseRawUrl + url.substring(config.baseRefUrl.length);
   }
-  return config.baseRawUrl + url.substring(config.baseRefUrl.length);
+  throw Error(`URL doesn't start with ${config.baseRefUrl}`);
 }
 
 async function* iterateOverTSFiles(dir: string): AsyncGenerator<string> {
