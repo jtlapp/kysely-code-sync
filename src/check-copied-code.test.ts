@@ -5,13 +5,13 @@ import { join } from 'path';
 
 import { CONFIG_FILE_NAME, getConfig } from './test-sync-config.js';
 
-const COMMAND_PATH = join(__dirname, './check-copied-code.js');
+const COMMAND_PATH = join(__dirname, './check-synced-code.js');
 const TEST_DIR_NAME = 'test';
 const TEST_DIR = join(process.cwd(), TEST_DIR_NAME);
 const TEST_CONFIG_FILE = join(TEST_DIR_NAME, CONFIG_FILE_NAME);
 const EXPECTED_DIFFS_PATH = join(TEST_DIR, 'expected-diffs.txt');
 
-describe('check-copied-code', () => {
+describe('check-synced-code', () => {
   it('should produce the expected stderr output', async () => {
     const command = `node ${COMMAND_PATH} --config=${TEST_CONFIG_FILE}`;
     let stderr: string = await new Promise((resolve) => {

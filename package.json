@@ -1,6 +1,6 @@
 {
   "name": "kysely-test-sync",
-  "version": "0.1.0",
+  "version": "0.1.1s",
   "author": "Joseph T. Lapp <arachnojoe@gmail.com>",
   "license": "MIT",
   "description": "Utility for keeping code and tests in sync with the Kysely repo",
@@ -16,7 +16,7 @@
     "testing"
   ],
   "bin": {
-    "check-copied-code": "./dist/cjs/check-copied-code.js",
+    "check-synced-code": "./dist/cjs/check-synced-code.js",
     "load-kysely-tests": "./dist/cjs/load-kysely-tests.js"
   },
   "files": [

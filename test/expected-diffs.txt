@@ -11,4 +11,4 @@ test/mock-local-files-2/subdir/local-4.ts: differs from Kysely source
 test/mock-local-files-2/subdir/local-4.ts: differs from Kysely source
   4: export const A4_different = 1;
 
-6 copied code segments differ from their Kysely source
+6 synced code segments differ from their Kysely source

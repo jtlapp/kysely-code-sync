@@ -8,8 +8,8 @@ import {
 } from './test-sync-config.js';
 
 const ADAPTED_FROM_REGEX = /Adapted from ([^\s]+)/i;
-const BEGIN_UNCHANGED_LABEL = 'BEGIN COPIED CODE';
-const END_UNCHANGED_LABEL = 'END COPIED CODE';
+const BEGIN_UNCHANGED_LABEL = 'BEGIN SYNCED CODE';
+const END_UNCHANGED_LABEL = 'END SYNCED CODE';
 
 let differingCodeSegments = 0;
 
@@ -18,7 +18,7 @@ let differingCodeSegments = 0;
     await diffCopiedCode();
   } catch (e: any) {
     if (!(e instanceof InvalidConfigException)) throw e;
-    console.error(`Failed to difference copied code\n${e.message}\n`);
+    console.error(`Failed to difference synced code\n${e.message}\n`);
     process.exit(1);
   }
 })();
@@ -45,7 +45,7 @@ async function diffCopiedCode(): Promise<void> {
 
   if (differingCodeSegments > 0) {
     console.error(
-      `\n${differingCodeSegments} copied code segments differ from their Kysely source`
+      `\n${differingCodeSegments} synced code segments differ from their Kysely source`
     );
     process.exit(1);
   }
