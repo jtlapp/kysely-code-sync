@@ -1,10 +1,11 @@
 import { promises as fsp } from 'fs';
 import { join } from 'path';
 
-import { getConfig } from './test-sync-config.js';
+// TODO: pretty error output
+// TODO: test command errors
+// TODO: precede test config items with underscore
 
-const KYSELY_SOURCE_DIR = '../../node/src/temp';
-const CUSTOM_SETUP_FILE = '../custom-test-setup.js';
+import { TestSyncConfig, getConfig } from './test-sync-config.js';
 
 (async () => {
   try {
@@ -20,15 +21,28 @@ const CUSTOM_SETUP_FILE = '../custom-test-setup.js';
 
 async function installKyselyTests() {
   const config = await getConfig();
-  const kyselySourceDir = join(__dirname, KYSELY_SOURCE_DIR);
+  if (!config.testFiles) {
+    throw Error("Config file doesn't provide 'testFiles'");
+  }
+
+  const kyselySourceDir = join(process.cwd(), config.downloadedTestsDir);
+  try {
+    await fsp.rm(kyselySourceDir, { recursive: true });
+  } catch (e: any) {
+    if (e.code !== 'ENOENT') throw e;
+  }
   await fsp.mkdir(kyselySourceDir);
 
   for (const fileEntry of Object.entries(config.testFiles)) {
     const fileName = `${fileEntry[0]}.test.ts`;
-    const url = `${config.baseRawUrl}test/node/src/${fileName}`;
+    const url = `${config.baseTestRawUrl}${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);
     const response = await fetch(url);
+    if (!response.ok) {
+      throw Error(`Failed to load ${url}: ${response.statusText}`);
+    }
     const kyselySource = tweakKyselySource(
+      config,
       fileName,
       await response.text(),
       fileEntry[1]
@@ -38,13 +52,14 @@ async function installKyselyTests() {
 }
 
 function tweakKyselySource(
+  config: TestSyncConfig,
   fileName: string,
   source: string,
   excludedTests: string[]
 ): string {
   source = source
     .replaceAll(/from '\.\.[./]*'/g, (match) => "from 'kysely'")
-    .replaceAll('./test-setup.js', CUSTOM_SETUP_FILE);
+    .replaceAll('./test-setup.js', config.customSetupFile);
   for (const excludedTest of excludedTests) {
     const TEST_START = 'it(';
     const testNameOffset = source.indexOf(excludedTest);

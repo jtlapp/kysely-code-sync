@@ -1,17 +1,12 @@
 {
-  "baseRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
-  "baseRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
+  "baseCopyRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
+  "baseCopyRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
   "copyDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
   "testFiles": {
-    "delete": [],
-    "execute": [],
-    "insert": [],
-    "select": [
-      "should release connection on premature async iterator stop",
-      "should release connection on premature async iterator stop when using a specific chunk size",
-      "should throw an error if the cursor implementation is not provided for the postgres dialect"
-    ],
-    "transaction": ["should run multiple transactions in parallel"],
-    "update": []
-  }
+    "test-1": ["should do something 1A", "should do something 1C"],
+    "test-2": []
+  },
+  "baseTestRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files",
+  "downloadedTestsDir": "test/temp",
+  "customSetupFile": "../custom-test-setup.js"
 }
