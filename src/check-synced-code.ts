@@ -25,11 +25,13 @@ let differingCodeBlocks = 0;
 
 async function diffCopiedCode(): Promise<void> {
   const config = await getConfig();
-  if (!config.copyDirs) {
-    throw new InvalidConfigException("Config file doesn't provide 'copyDirs'");
+  if (!config.localSyncDirs) {
+    throw new InvalidConfigException(
+      "Config file doesn't provide 'localSyncDirs'"
+    );
   }
 
-  for (const dir of config.copyDirs) {
+  for (const dir of config.localSyncDirs) {
     const dirPath = path.join(process.cwd(), dir);
 
     for await (const path of iterateOverTSFiles(dirPath)) {

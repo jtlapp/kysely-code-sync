@@ -30,8 +30,10 @@ async function installKyselyTests() {
   // Load the configuration file.
 
   const config = await getConfig();
-  if (!config.testFiles) {
-    throw new InvalidConfigException("Config file doesn't provide 'testFiles'");
+  if (!config.kyselyTestFiles) {
+    throw new InvalidConfigException(
+      "Config file doesn't provide 'kyselyTestFiles'"
+    );
   }
 
   // Create the directory for the downloaded tests, initially empty.
@@ -47,7 +49,7 @@ async function installKyselyTests() {
   // Dowload the test files.
 
   const baseDownloadUrl = await getBaseDownloadUrl(config);
-  for (const fileEntry of Object.entries(config.testFiles)) {
+  for (const fileEntry of Object.entries(config.kyselyTestFiles)) {
     const fileName = `${fileEntry[0]}.test.ts`;
     const url = `${baseDownloadUrl}${config.kyselyTestDir}${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);

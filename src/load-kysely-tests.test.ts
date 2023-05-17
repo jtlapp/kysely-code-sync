@@ -59,11 +59,11 @@ describe('load-kysely-tests', () => {
 
     let err = await runCommand(join(testConfigDir, 'empty.json'));
     expect(err).to.contain(
-      "must provide at least one of 'copyDirs' and 'testFiles'"
+      "must provide at least one of 'localSyncDirs' and 'kyselyTestFiles'"
     );
 
-    err = await runCommand(join(testConfigDir, 'no-testFiles.json'));
-    expect(err).to.contain("Config file doesn't provide 'testFiles'");
+    err = await runCommand(join(testConfigDir, 'no-kyselyTestFiles.json'));
+    expect(err).to.contain("Config file doesn't provide 'kyselyTestFiles'");
 
     err = await runCommand(join(testConfigDir, 'no-kyselyTestDir.json'));
     expect(err).to.contain("must provide 'kyselyTestDir'");

@@ -1,7 +1,7 @@
 {
-  "copyDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
+  "localSyncDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
   "kyselyTestDir": "test/node/src/",
-  "testFiles": {
+  "kyselyTestFiles": {
     "test-1": ["should do something 1A", "should do something 1C"],
     "test-2": []
   },

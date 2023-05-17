@@ -8,16 +8,15 @@ const DEFAULT_BASE_COPY_REF_URL =
   'https://github.com/kysely-org/kysely/blob/master/';
 const DEFAULT_BASE_COPY_RAW_URL =
   'https://raw.githubusercontent.com/kysely-org/kysely/master/';
-const DEFAULT_KYSELY_TEST_DIR = 'test/node/src/';
 
 let config: TestSyncConfig;
 
 export interface TestSyncConfig {
   __baseCopyRefUrl: string;
   __baseCopyRawUrl: string;
-  copyDirs: string[]; // TODO: rename to localCopyDirs
+  localSyncDirs: string[];
   kyselyTestDir: string;
-  testFiles: Record<string, string[]>; // TODO: rename to kyselyTestFiles
+  kyselyTestFiles: Record<string, string[]>;
   downloadedTestsDir: string;
   customSetupFile: string;
 }
@@ -42,24 +41,24 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       );
     }
 
-    if (!config.copyDirs && !config.testFiles) {
+    if (!config.localSyncDirs && !config.kyselyTestFiles) {
       throw new InvalidConfigException(
-        `${relativeConfigPath} must provide at least one of 'copyDirs' and 'testFiles'`
+        `${relativeConfigPath} must provide at least one of 'localSyncDirs' and 'kyselyTestFiles'`
       );
     }
-    if (config.testFiles && !config.kyselyTestDir) {
+    if (config.kyselyTestFiles && !config.kyselyTestDir) {
       throw new InvalidConfigException(
-        `${relativeConfigPath} must provide 'kyselyTestDir' for 'testFiles'`
+        `${relativeConfigPath} must provide 'kyselyTestDir' for 'kyselyTestFiles'`
       );
     }
-    if (config.testFiles && !config.downloadedTestsDir) {
+    if (config.kyselyTestFiles && !config.downloadedTestsDir) {
       throw new InvalidConfigException(
-        `${relativeConfigPath} must provide 'downloadedTestsDir' for 'testFiles'`
+        `${relativeConfigPath} must provide 'downloadedTestsDir' for 'kyselyTestFiles'`
       );
     }
-    if (config.testFiles && !config.customSetupFile) {
+    if (config.kyselyTestFiles && !config.customSetupFile) {
       throw new InvalidConfigException(
-        `${relativeConfigPath} must provide 'customSetupFile' for 'testFiles'`
+        `${relativeConfigPath} must provide 'customSetupFile' for 'kyselyTestFiles'`
       );
     }
 
@@ -71,10 +70,7 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       config.__baseCopyRawUrl,
       DEFAULT_BASE_COPY_RAW_URL
     );
-    config.kyselyTestDir = appendSlash(
-      config.kyselyTestDir,
-      DEFAULT_KYSELY_TEST_DIR
-    );
+    config.kyselyTestDir = appendSlash(config.kyselyTestDir, '');
   }
   return config;
 }

@@ -58,7 +58,7 @@ The `check-synced-code` command only uses the configuration key:
 <!-- prettier-ignore -->
 | Key | Description |
 | --- | --- |
-| `copyDirs` | An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
+| `localSyncDirs` | An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
 
 The `load-kysely-tests` command uses the following configuration keys:
 
@@ -66,7 +66,7 @@ The `load-kysely-tests` command uses the following configuration keys:
 | Key | Description |
 | --- | --- |
 | `baseTestRawUrl` | Optional. Portion of the raw URL to the Kysely test files for the directory in which the files are found. Defaults to the URL for `test/node/src`. |
-| `testFiles` | Required. Object mapping test names to arrays of test names. If a file in the `baseTestRawUrl` directory has name `select.test.ts`, the key is just `select`. The test names are the names of the tests that are to be skipped. |
+| `kyselyTestFiles` | Required. Object mapping test names to arrays of test names. If a file in the `baseTestRawUrl` directory has name `select.test.ts`, the key is just `select`. The test names are the names of the tests that are to be skipped. |
 | `downloadedTestsDir` | Required. This is the temporary directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
 | `customSetupFile` | Required. This is the path to the test setup code, expressed relative to the files in `downloadedTestsDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
 
@@ -75,8 +75,8 @@ Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg
 ```json
 // example test-sync.json
 {
-  "copyDirs": ["src", "test/node/src"],
-  "testFiles": {
+  "localSyncDirs": ["src", "test/node/src"],
+  "kyselyTestFiles": {
     "delete": [],
     "execute": [],
     "insert": [],
@@ -107,7 +107,7 @@ You'll use separate configuration files for running tests from different Kysely 
 
 The `check-synced-code` command compares designated blocks of code in your repo with corresponding code in the Kysely repo. These are blocks of code that you have copied from Kysely to implement or test your Kysely extension. Remember to include copyright notices.
 
-Make sure that any code you want synchronized with Kysely is in a directory listed in the `copyDirs` configuration key. The code can also be within a nested directory.
+Make sure that any code you want synchronized with Kysely is in a directory listed in the `localSyncDirs` configuration key. The code can also be within a nested directory.
 
 In a comment at the start of the file, include the words `SYNC WITH <URL>`, where `<URL>` is the GitHub URL for the file that contains the code you copied from. This can be either a "blob" URL or a "raw" URL. `SYNC WITH` must be uppercase.
 
@@ -200,7 +200,7 @@ export function reportMochaContext(_cx: MochaContext): void {
 
 The trickiest part of modifying the test setup is getting the tests to transpile despite not running the tests against any of its native dialects. There are many ways to do this, and I'll not walk you through it, but you can reference [`kysely-pg-client`'s implementation](https://github.com/jtlapp/kysely-pg-client/blob/main/test/node/src/custom-test-setup.ts). This implementation restricts execution to just the `postgres` dialect.
 
-If you aren't using Kysely's `test/node` test suite, you'll need to point the `baseTestRawUrl` configuration key to the suite. List the test files that you would like to run as keys of the `testFiles` object. Only these files of the suite will be downloaded. Each file key takes an array value. This is an array of the test names that will **NOT** be run as part of the local test suite. The downloader will attach a `.skip` qualifier to them. Finally, set `downloadedTestsDir` to the directory into which the test files should be downloaded.
+If you aren't using Kysely's `test/node` test suite, you'll need to point the `baseTestRawUrl` configuration key to the suite. List the test files that you would like to run as keys of the `kyselyTestFiles` object. Only these files of the suite will be downloaded. Each file key takes an array value. This is an array of the test names that will **NOT** be run as part of the local test suite. The downloader will attach a `.skip` qualifier to them. Finally, set `downloadedTestsDir` to the directory into which the test files should be downloaded.
 
 Now you can run `npx load-kysely-tests` to download the test files into the download directory and have them modified for use in the local test suite. It's probably best to call the command on every run of the test, so you don't have to remember to download the files prior to running the test.
 

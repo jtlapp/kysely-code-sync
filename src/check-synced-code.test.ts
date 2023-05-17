@@ -67,8 +67,8 @@ describe('check-synced-code', () => {
     output = await runCommand('invalid-config.json');
     expect(output[1]).to.contain('Config file not found');
 
-    output = await runCommand(join(testConfigDir, 'no-copyDirs.json'));
-    expect(output[1]).to.contain("Config file doesn't provide 'copyDirs'");
+    output = await runCommand(join(testConfigDir, 'no-localSyncDirs.json'));
+    expect(output[1]).to.contain("Config file doesn't provide 'localSyncDirs'");
 
     try {
       await getConfig(join(testConfigDir, 'valid-for-kysely.json'));
