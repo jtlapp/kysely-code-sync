@@ -140,8 +140,10 @@ Your custom test setup file must export a `reportMochaContext()` function. This 
 
 <!-- prettier-ignore -->
 ```ts
-let parentTestName: string | undefined
-let currentTestName: string | undefined
+import { Context as MochaContext } from 'mocha'
+
+let parentTestName?: string
+let currentTestName?: string
 
 export function reportMochaContext(cx: MochaContext): void {
   parentTestName = cx.test?.parent?.title
@@ -161,7 +163,10 @@ This function is probably most useful for intercepting calls to `testSql()`, whi
 
 Of course, if you don't need this function, you can just stub it out:
 
+<!-- prettier-ignore -->
 ```ts
+import { Context as MochaContext } from 'mocha'
+
 export function reportMochaContext(_cx: MochaContext): void {
   // not used
 }
