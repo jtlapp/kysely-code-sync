@@ -1,5 +1,5 @@
 /**
- * Adapted from https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files/subdir/kysely-3.ts
+ * SYNC WITH https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-files/subdir/kysely-3.ts
  */
 export const A3x = 1;
 /* BEGIN SYNCED CODE */

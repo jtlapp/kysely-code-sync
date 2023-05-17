@@ -87,13 +87,13 @@ The `check-synced-code` command compares designated blocks of code in your repo 
 
 Make sure that any code you want synchronized with Kysely is in a directory listed in the `copyDirs` configuration key. The code can also be within a nested directory.
 
-In a comment at the start of the file, include the words `Adapted from <URL>`, where `<URL>` is the GitHub URL for the file that contains the code you copied from. This can be either a "blob" URL or a "raw" URL.
+In a comment at the start of the file, include the words `SYNC WITH <URL>`, where `<URL>` is the GitHub URL for the file that contains the code you copied from. This can be either a "blob" URL or a "raw" URL. `SYNC WITH` must be uppercase.
 
 Before each block of code that you which to keep synchronized with Kysely, add a comment including the exact phrase `BEGIN SYNCED CODE`, including letter case. And after each of these blocks of code, include a comment with the exact phrase `END SYNCED CODE`. For example:
 
 <!-- prettier-ignore -->
 ```ts
-// Adapted from https://github.com/kysely-org/kysely/blob/master/test/node/src/test-setup.ts
+// SYNC WITH https://github.com/kysely-org/kysely/blob/master/test/node/src/test-setup.ts
 
 ...
 

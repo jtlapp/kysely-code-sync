@@ -7,7 +7,7 @@ import {
   getConfig,
 } from './test-sync-config.js';
 
-const ADAPTED_FROM_REGEX = /Adapted from ([^\s]+)/i;
+const ADAPTED_FROM_REGEX = /SYNC WITH ([^\s]+)/;
 const BEGIN_UNCHANGED_LABEL = 'BEGIN SYNCED CODE';
 const END_UNCHANGED_LABEL = 'END SYNCED CODE';
 

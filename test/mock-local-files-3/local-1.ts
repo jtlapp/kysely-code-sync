@@ -1,4 +1,4 @@
-// Adapted from https://github.com/jtlapp/kysely-test-sync/blob/main/test/mock-kysely-files/kysely-1.ts
+// SYNC WITH https://github.com/jtlapp/kysely-test-sync/blob/main/test/mock-kysely-files/kysely-1.ts
 
 /* BEGIN SYNCED CODE */
 export const A1 = 1;
