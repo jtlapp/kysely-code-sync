@@ -1,7 +1,7 @@
 {
   "__baseCopyRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
   "__baseCopyRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
-  "__baseTestRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-tests",
+  "baseTestRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-tests",
   "testFiles": {
     "test-1": ["should do something 1A", "should do something 1C"],
     "test-2": []

@@ -16,7 +16,7 @@ let config: TestSyncConfig;
 export interface TestSyncConfig {
   __baseCopyRefUrl: string;
   __baseCopyRawUrl: string;
-  __baseTestRawUrl: string;
+  baseTestRawUrl: string;
   copyDirs: string[];
   testFiles: Record<string, string[]>;
   downloadedTestsDir: string;
@@ -67,8 +67,8 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       config.__baseCopyRawUrl,
       DEFAULT_BASE_COPY_RAW_URL
     );
-    config.__baseTestRawUrl = appendSlash(
-      config.__baseTestRawUrl,
+    config.baseTestRawUrl = appendSlash(
+      config.baseTestRawUrl,
       DEFAULT_BASE_TEST_RAW_URL
     );
   }

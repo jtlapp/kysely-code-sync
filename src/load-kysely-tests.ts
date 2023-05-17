@@ -33,7 +33,7 @@ async function installKyselyTests() {
 
   for (const fileEntry of Object.entries(config.testFiles)) {
     const fileName = `${fileEntry[0]}.test.ts`;
-    const url = `${config.__baseTestRawUrl}${fileName}`;
+    const url = `${config.baseTestRawUrl}${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);
     const response = await fetch(url);
     if (!response.ok) {
