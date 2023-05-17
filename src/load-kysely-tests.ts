@@ -78,6 +78,9 @@ async function getBaseDownloadUrl(config: TestSyncConfig): Promise<string> {
     }
     return BASE_TEST_RAW_URL; // for testing kysely-test-sync
   }
+  // The following code is not tested because its behavior varies
+  // according the installed project's package.json file. However,
+  // each of the function is individually tested.
   const maxVersions = getMaxVersions(kyselyVersion);
   const nearestVersion = await getClosestKyselyVersion(maxVersions);
   console.log(`Downloading tests for Kysely version ${nearestVersion}.\n`);
