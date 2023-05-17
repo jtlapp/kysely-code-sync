@@ -1,6 +1,6 @@
 {
   "name": "kysely-test-sync",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "author": "Joseph T. Lapp <arachnojoe@gmail.com>",
   "license": "MIT",
   "description": "Utility for keeping code and tests in sync with the Kysely repo",

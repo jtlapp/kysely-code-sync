@@ -2,8 +2,6 @@
 
 Utility for keeping code and tests in sync with the Kysely repo
 
-**UNDER DEVELOPMENT. NOT READY FOR USE. BUT SOON!**
-
 ## Introduction
 
 With this utility, you can run your code against tests in published versions of the Kysely repo. Semantic versioning determines the appropriate release of Kysely to use, allowing code to run against newer releases that are supposed to be compatible. The utility is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
@@ -13,7 +11,7 @@ With this utility, you can run your code against tests in published versions of 
 3. It allows you to learn when Kysely has fixed a bug that also requires your attention.
 4. It allows you to borrow code from the Kysely repo that you found necessary for implementation, while also informing you of when Kysely has changed the borrowed code, in case you also need to update the code.
 
-The utility accomplishes this with two development-time commands. The first command is `check-synced-code`, which compares blocks of code that you have borrowed from Kysely with the corresponding code in Kysely releases. You label the start and end of each of these blocks within your own code, and the tool reports the differences found.
+The utility accomplishes this with two development-time commands. The first command is `check-synced-code`, which compares blocks of code that you have borrowed from Kysely with the corresponding code in Kysely releases. You label the start and end of each of these blocks within your own code, and the tool reports the differences found. The command is especially useful for adapting tests.
 
 The second command is `load-kysely-tests`. It downloads selected test files from Kysely releases and modifies them for local use, storing them in a temporary directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. You would normally execute the command before each run of tests, so that you're using the latest possible tests.
 
@@ -31,7 +29,7 @@ yarn add -D kysely-test-sync
 pnpm add -D kysely-test-sync
 ```
 
-To run downloaded Kysely tests, you'll also need to install Kysely and [Kysely's test dependencies](https://github.com/kysely-org/kysely/blob/master/package.json), which you may need to manually keep in sync with Kysely. These are the additional dependencies at the time of this writing:
+To run downloaded Kysely tests, you'll also need to install Kysely and [Kysely's test dependencies](https://github.com/kysely-org/kysely/blob/master/package.json), which you may need to manually keep in sync with the appropriate Kysely release. These are the additional dependencies at the time of this writing:
 
 ```json
   "devDependencies": {
@@ -108,13 +106,13 @@ You'll use separate configuration files for running tests from different Kysely 
 
 ## Using `check-synced-code`
 
-The `check-synced-code` command compares designated blocks of code in your repo with corresponding code in Kysely releases. These are blocks of code that you have copied from Kysely to implement or test your Kysely extension. Be sure to borrow code from the appropriate Kysely release, instead of from whatever is currently in the master branch, which might be newer code intended for a later release. Also remember to convey copyright notices.
+The `check-synced-code` command compares designated blocks of code in your repo with corresponding code in Kysely releases. These are blocks of code that you have copied from Kysely to implement or test your Kysely extension. Be sure to borrow code from the appropriate Kysely release, instead of from the master branch, which might have newer code intended for a later release. Also remember to convey copyright notices.
 
 Make sure that any code you want synchronized with Kysely is in a directory listed in the `localSyncDirs` configuration key. The code can also be within a nested directory.
 
 In a comment at the start of the file, include the words `SYNC WITH <URL>`, where `<URL>` is the GitHub URL for the file that contains the code you copied from. This can be either a "blob" URL or a "raw" URL. `SYNC WITH` must be uppercase.
 
-Before each block of code that you which to keep synchronized with Kysely, add a comment including the exact phrase `BEGIN SYNCED CODE`, including letter case. And after each of these blocks of code, include a comment with the exact phrase `END SYNCED CODE`. For example:
+Before each block of code that you which to keep synchronized with Kysely, add a comment including the exact phrase `BEGIN SYNCED CODE`, including letter case. After each of these blocks of code, include a comment with the exact phrase `END SYNCED CODE`. For example:
 
 <!-- prettier-ignore -->
 ```ts
@@ -129,7 +127,6 @@ export interface Person {
   middle_name: ColumnType<string | null, string | undefined, string | undefined>
   last_name: string | null
   gender: 'male' | 'female' | 'other'
-  marital_status: 'single' | 'married' | 'divorced' | 'widowed' | null
 }
 
 export interface Pet {
@@ -141,13 +138,19 @@ export interface Pet {
 /* END SYNCED CODE */
 ```
 
-The code in this block must match the code in Kysely, including identation, blank lines, and prettier format. To get the right indentation, you may need to bracket code in simple `{ ... }` code blocks. Kysely does not end statements with semi-colons, so you'll need to be sure your prettier is not automatically including them.
+The code in this block must match the code in Kysely, including identation, blank lines, and prettier format. To get matching indentation, you may need to further bracket code in simple `{ ... }` code blocks. Kysely does not end statements with semi-colons, so you'll need to be sure your prettier is not automatically including them.
 
-Run `npx check-synced-code` to compare these blocks with the most recent files in the Kysely master branch. The tool looks for an exact match. It reports when no match can be found, and when a partial match is found, it reports the first differing line in each block, providing the line number in your local file. It's probably best to call this command prior to every build of code that includes synchronized blocks.
+Run `npx check-synced-code` to compare these blocks with the most recent version-compatible release of Kysely. The tool requries the code to exactly match a of block of code within Kysely. It reports when no match can be found, and when a partial match is found, it reports the first differing line in each block, providing the line number for your local file.
+
+When differences are found, they are written to `stderr` and the command exits with exit code 1.
 
 ## Using `load-kysely-tests`
 
-The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifes them for local use. But it requires quite a bit of setup. I found it easiest to locally mirror the Kysely test structure and borrow `package.json` test scripts from Kysely. Here is the structure I have working with [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
+The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifies them for local use. It does not compile or run the tests. You'll need to provide the scripts that compile and run the tests.
+
+This command requires quite a bit of setup. I found it easiest to locally mirror the Kysely test structure and borrow some of Kysely's `package.json` test scripts.
+
+Here is the structure I have working with [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
 
 ```
 test-sync.json
@@ -161,11 +164,11 @@ test/
         custom-transaction.test.ts
 ```
 
-The files `custom-select.test.ts` and `custom-transaction.test.ts` contain tests I modified from Kysely's `select.test.ts` and `transaction.test.ts` files. You don't have to prefix these files with `custom-`; I only did so to make it clear that I'm not looking at the downloaded `select.test.ts` and `transaction.test.ts`, most of whose tests I'm also running.
+The files `custom-select.test.ts` and `custom-transaction.test.ts` contain tests I modified from Kysely's `select.test.ts` and `transaction.test.ts` files. You don't have to prefix these files with `custom-`; I only did so to make it clear when I'm not looking at the downloaded `select.test.ts` and `transaction.test.ts`, whose tests I'm also running.
 
-You'll almost certainly need to create `custom-test-setup.ts` by copying and modifying the appropriate `test-setup.ts` file from Kysely. This is a good place to be using synced code blocks, as well as in your custom test files. You can give setup file any name you want; just be sure to set the `customSetupFile` configuration key to the file.
+You'll almost certainly need to create your `custom-test-setup.ts` by copying and modifying the appropriate `test-setup.ts` file from Kysely. This is a good place to be using synced code blocks, as well as in your custom test files. You can give the setup file any name you want; just be sure to set the `customSetupFile` configuration key to the file.
 
-Your custom test setup file must export a `reportMochaContext()` function. This function receives the Mocha context for each test immediately prior to running the test. This context is the value of `this` within a Mocha test. You can use it to get the name of the enclosing `describe` block as well as the name of the curren test. (Sorry, I can't find a decent reference.) Here is an example implementation:
+Your custom setup file must export a `reportMochaContext()` function. This function receives the Mocha context for each test immediately before the test is run. The context is the value of `this` within a non-arrow function Mocha test. You can use the context to get the name of the enclosing `describe` block as well as the name of the current test. (Sorry, I can't find a decent reference.) Here is an example implementation:
 
 <!-- prettier-ignore -->
 ```ts
@@ -188,7 +191,7 @@ export function reportMochaContext(cx: MochaContext): void {
 }
 ```
 
-This function is probably most useful for intercepting calls to `testSql()`, which is defined in the test setup. It receives object mapping dialects to SQL to run for the dialect, but if you're developing your own dialect, your dialect won't be among those in Kysely's test suite. You can remedy this by modifying `testSql()` to use the appropriate dialect-specific SQL associated wth the test case indicated by the most recent call to `reportMochaContext()`.
+This function is probably most useful for intercepting calls to `testSql()`, which is defined in the test setup. `testSql()` receives an object that maps dialect names to SQL and verifies that the query compiles to this SQL. If you're developing your own dialect, your dialect won't be in this object map. You can remedy this by having `testSql()` associate your own SQL with each test and relying on `reportMochaContext()` to indicate the current test.
 
 Of course, if you don't need this function, you can just stub it out:
 
@@ -201,24 +204,49 @@ export function reportMochaContext(_cx: MochaContext): void {
 }
 ```
 
-The trickiest part of modifying the test setup is getting the tests to transpile despite not running the tests against any of its native dialects. There are many ways to do this, and I'll not walk you through it, but you can reference [`kysely-pg-client`'s implementation](https://github.com/jtlapp/kysely-pg-client/blob/main/test/node/src/custom-test-setup.ts). This implementation restricts execution to just the `postgres` dialect.
+The trickiest part of modifying the test setup is getting the tests to transpile despite not using the native dialects. There are many ways to accomplish this, and I'll not walk you through it, but you can reference [`kysely-pg-client`'s implementation](https://github.com/jtlapp/kysely-pg-client/blob/main/test/node/src/custom-test-setup.ts). This implementation restricts execution to just the `postgres` dialect.
 
-Set the `KyselyTestDir` configuration key to the directory of the desired test suite. List the test files that you would like to run as keys of the `kyselyTestFiles` object. Only these files of the suite will be downloaded. Each of these file keys takes an array of the test names that will **NOT** be run as part of the local test suite. The downloader will attach a `.skip` qualifier to each of them. Finally, set `downloadDir` to the directory into which the test files should be downloaded.
+Also create the configuration file. Set the `KyselyTestDir` key to the directory of the desired test suite. List the test files that you would like to run as keys of the `kyselyTestFiles` object. Only these files of the suite will be downloaded. Each of these file keys takes an array of the names of tests that will **NOT** be run as part of the local test suite; the downloader attaches a `.skip` qualifier to each of them. Finally, set `downloadDir` to the directory into which the test files should be downloaded.
 
-Now you can run `npx load-kysely-tests` to download the test files into the download directory and have them modified for use in the local test suite. It's probably best to call the command on every run of the test, so you don't have to remember to download the files prior to running the test.
+Now you can run `npx load-kysely-tests` to download the test files into the download directory, modified for use in the local test suite. You'll need to decide whether to run the command on every run of the test or only ever update the tests manually.
 
-You'll probably also want to add the download directory to your `.gitignore`.
+You'll probably also want to add the download directory to `.gitignore`.
 
 ## Semantic Versioning of Tests
 
-TBD
+When you run `check-synced-code` or `load-kysely-tests`, the command looks up the version of Kysely that's installed, according to `package.json`. It then identifies the most recent Kysely release that is supposed to be compatible with this version. Synced code blocks are compared with this release and test files are downloaded from this release.
 
-## The Meaning of Test Failures
+The most recent compatible release is determined as follows:
 
-When `check-synced-code` reports differences, or when tests that `load-kysely-tests` has downloaded report test failures, you can't necessarily infer that there is a bug in your code. All you can infer is that something has changed in the Kysely repo that requires your attention. You may only need to make small tweaks to get things running again, or you may find that Kysely has reorganized its code, or you may find that Kysely has indeed added a test that uncovers a bug in your code.
+<!-- prettier-ignore -->
+| Version Prefix | Example | Release Used |
+| :---: | :---: | --- |
+| none | `1.2.3` | Only this exact release (e.g. `1.2.3`). |
+| `=` | `=1.2.3` | Only this exact release (e.g. `1.2.3`). |
+| `~` | `~1.2.3` | The greatest patch release of this major/minor version (e.g. `1.2.10`) |
+| `^` | `^1.2.3` | The greatest minor release of this major version (e.g. `1.20.5`), unless the major release is `0`, in which case behaves as if the prefix were `~`. |
+| `<=` | `<=1.2.3` | Only this exact release (e.g. `1.2.3`). |
+| `>=` | `>=1.2.3` | The most recent release, even if it has a different major version (e.g. `4.1.0`). |
+| `latest` | `latest` | Same as `>=`. |
 
-Unlike a traditional test suite, a test suite that employs these commands can (almost certainly will) eventually break without your ever changing a line. This is by design. The folks who maintain Kysely are maintaining part of your test suite for you.
-You are getting some repo maintenance for free.
+Each command outputs text reporting the release it is using. For example:
+
+```
+Syncing with Kysely release 0.24.2...
+  https://github.com/kysely-org/kysely/tree/0.24.2
+```
+
+## Implications of this Approach
+
+When `check-synced-code` reports differences, or when tests that `load-kysely-tests` has downloaded report test failures, you can't necessarily infer that there is a bug in your code. All you can infer is that a more recent release changed something that requires your attention, because the newer code is somehow incompatible.
+
+Unlike a traditional test suite, a test suite that employs these commands can (almost certainly will) eventually break without your ever changing a line. This is by design. The folks who maintain Kysely are maintaining part of your test suite for you. You are getting some repo maintenance for free.
+
+One downside is that you will have to continually maintain the repo as Kysely changes, in order to keep tests passing. But that's only a downside for you, not for your users.
+
+Another downside is that a user who clones your repo and runs your tests may find that the tests do not pass. This does not look good. However, assuming that the tests did once pass, this is actually very good news for the user, as the user has just uncovered a potential problem that was not previously known, enabling the problem to be resolved and producing a more reliable product.
+
+To avoid these downsides, you can fix the Kysely installation to an exact version, such as by using the `=` prefix. Then you have complete control over whether tests pass and when to spend time getting your code working with the latest version of Kysely.
 
 ## License
 
