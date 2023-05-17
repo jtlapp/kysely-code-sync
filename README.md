@@ -6,16 +6,18 @@ Utility for keeping code and tests in sync with the Kysely repo
 
 ## Introduction
 
-With this utility, you can run your code against tests that are in the master branch of the Kysely repo. Semantic versioning determines the appropriate release of Kysely to use, allowing code to run against newer releases. The utility is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
+With this utility, you can run your code against tests in published versions of the Kysely repo. Semantic versioning determines the appropriate release of Kysely to use, allowing code to run against newer releases that are supposed to be compatible. The utility is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
 
 1. It allows you to have confidence that Kysely continues to work as expected under the extension, that you didn't accidentally overlook something.
 2. It allows you to benefit from new tests that are added to Kysely.
 3. It allows you to learn when Kysely has fixed a bug that also requires your attention.
 4. It allows you to borrow code from the Kysely repo that you found necessary for implementation, while also informing you of when Kysely has changed the borrowed code, in case you also need to update the code.
 
-The utility accomplishes this with two development-time commands. The first command is `check-synced-code`, which compares blocks of code that you have borrowed from Kysely with the corresponding code that is currently in Kysely. You label the start and end of each of these blocks within your own code, and the tool reports the differences found.
+The utility accomplishes this with two development-time commands. The first command is `check-synced-code`, which compares blocks of code that you have borrowed from Kysely with the corresponding code in Kysely releases. You label the start and end of each of these blocks within your own code, and the tool reports the differences found.
 
-The second command is `load-kysely-tests`. It downloads selected test files from the Kysely repo and modifies them for local use, storing them in a temporary directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. The command would run with every run of the test suite, so that the code always runs against the latest Kysely tests.
+The second command is `load-kysely-tests`. It downloads selected test files from Kysely releases and modifies them for local use, storing them in a temporary directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. You would normally execute the command before each run of tests, so that you're using the latest possible tests.
+
+The utility respects the semantic version of your package's Kysely installation, always referencing the code of the most recent compatible release of Kysely.
 
 ## Installation
 
@@ -106,7 +108,7 @@ You'll use separate configuration files for running tests from different Kysely 
 
 ## Using `check-synced-code`
 
-The `check-synced-code` command compares designated blocks of code in your repo with corresponding code in the Kysely repo. These are blocks of code that you have copied from Kysely to implement or test your Kysely extension. Remember to include copyright notices.
+The `check-synced-code` command compares designated blocks of code in your repo with corresponding code in Kysely releases. These are blocks of code that you have copied from Kysely to implement or test your Kysely extension. Be sure to borrow code from the appropriate Kysely release, instead of from whatever is currently in the master branch, which might be newer code intended for a later release. Also remember to convey copyright notices.
 
 Make sure that any code you want synchronized with Kysely is in a directory listed in the `localSyncDirs` configuration key. The code can also be within a nested directory.
 
