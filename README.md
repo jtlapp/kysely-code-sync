@@ -2,6 +2,8 @@
 
 Utility for keeping code and tests in sync with the Kysely repo
 
+**UNDER DEVELOPMENT. NOT READY FOR USE. BUT SOON!**
+
 ## Introduction
 
 With this utility, you can run your code against tests that are currently in the master branch of the Kysely repo. It is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
@@ -26,6 +28,26 @@ yarn add -D kysely-test-sync
 
 pnpm add -D kysely-test-sync
 ```
+
+To run downloaded Kysely tests, you'll also need to install Kysely and [Kysely's test dependencies](https://github.com/kysely-org/kysely/blob/master/package.json), which you may need to manually keep in sync with Kysely. These are the additional dependencies at the time of this writing:
+
+```json
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/chai-as-promised": "^7.1.5",
+    "@types/chai-subset": "^1.3.3",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.15.11",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "kysely": "latest",
+    "mocha": "^10.0.0",
+    "typescript": "^4.9.5"
+  }
+```
+
+The utility requires Node.js v18 or higher.
 
 ## Configuration
 
