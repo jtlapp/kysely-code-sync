@@ -6,7 +6,7 @@ Utility for keeping code and tests in sync with the Kysely repo
 
 ## Introduction
 
-With this utility, you can run your code against tests that are currently in the master branch of the Kysely repo. It is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
+With this utility, you can run your code against tests that are in the master branch of the Kysely repo. Semantic versioning determines the appropriate release of Kysely to use, allowing code to run against newer releases. The utility is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
 
 1. It allows you to have confidence that Kysely continues to work as expected under the extension, that you didn't accidentally overlook something.
 2. It allows you to benefit from new tests that are added to Kysely.
@@ -206,6 +206,10 @@ Set the `KyselyTestDir` configuration key to the directory of the desired test s
 Now you can run `npx load-kysely-tests` to download the test files into the download directory and have them modified for use in the local test suite. It's probably best to call the command on every run of the test, so you don't have to remember to download the files prior to running the test.
 
 You'll probably also want to add the download directory to your `.gitignore`.
+
+## Semantic Versioning of Tests
+
+TBD
 
 ## The Meaning of Test Failures
 
