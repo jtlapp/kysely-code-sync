@@ -6,6 +6,15 @@ import {
   getConfig,
   InvalidConfigException,
 } from './test-sync-config.js';
+import {
+  getKyselySourceURL,
+  getKyselyVersion,
+  getMaxVersions,
+  getClosestKyselyVersion,
+} from './kysely-versions.js';
+
+const BASE_TEST_RAW_URL =
+  'https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/';
 
 (async () => {
   try {
@@ -18,10 +27,14 @@ import {
 })();
 
 async function installKyselyTests() {
+  // Load the configuration file.
+
   const config = await getConfig();
   if (!config.testFiles) {
     throw new InvalidConfigException("Config file doesn't provide 'testFiles'");
   }
+
+  // Create the directory for the downloaded tests, initially empty.
 
   const kyselySourceDir = join(process.cwd(), config.downloadedTestsDir);
   try {
@@ -31,9 +44,12 @@ async function installKyselyTests() {
   }
   await fsp.mkdir(kyselySourceDir);
 
+  // Dowload the test files.
+
+  const baseDownloadUrl = await getBaseDownloadUrl(config);
   for (const fileEntry of Object.entries(config.testFiles)) {
     const fileName = `${fileEntry[0]}.test.ts`;
-    const url = `${config.baseTestRawUrl}${fileName}`;
+    const url = `${baseDownloadUrl}${config.kyselyTestDir}${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);
     const response = await fetch(url);
     if (!response.ok) {
@@ -47,6 +63,31 @@ async function installKyselyTests() {
     );
     await fsp.writeFile(localFilePath, kyselySource);
   }
+}
+
+async function getBaseDownloadUrl(config: TestSyncConfig): Promise<string> {
+  const kyselyVersion = getKyselyVersion();
+  if (!kyselyVersion) {
+    if (
+      !config.__baseCopyRawUrl ||
+      !config.__baseCopyRefUrl.includes(await getPackageName())
+    ) {
+      throw new InvalidConfigException(
+        'Kysely is not installed as a dependency'
+      );
+    }
+    return BASE_TEST_RAW_URL; // for testing kysely-test-sync
+  }
+  const maxVersions = getMaxVersions(kyselyVersion);
+  const nearestVersion = await getClosestKyselyVersion(maxVersions);
+  console.log(`Downloading tests for Kysely version ${nearestVersion}.\n`);
+  return getKyselySourceURL(nearestVersion);
+}
+
+async function getPackageName(): Promise<string> {
+  const packageJsonPath = join(process.cwd(), 'package.json');
+  const json = JSON.parse(await fsp.readFile(packageJsonPath, 'utf-8'));
+  return json.name;
 }
 
 function tweakKyselySource(

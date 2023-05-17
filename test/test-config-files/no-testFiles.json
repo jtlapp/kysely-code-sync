@@ -1,8 +1,8 @@
 {
   "__baseCopyRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
   "__baseCopyRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
+  "kyselyTestDir": "test/mock-kysely-tests/",
   "copyDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
-  "baseTestRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/test/mock-kysely-tests",
   "downloadedTestsDir": "test/temp",
   "customSetupFile": "../custom-test-setup.js"
 }

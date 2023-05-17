@@ -65,6 +65,9 @@ describe('load-kysely-tests', () => {
     err = await runCommand(join(testConfigDir, 'no-testFiles.json'));
     expect(err).to.contain("Config file doesn't provide 'testFiles'");
 
+    err = await runCommand(join(testConfigDir, 'no-kyselyTestDir.json'));
+    expect(err).to.contain("must provide 'kyselyTestDir'");
+
     err = await runCommand(join(testConfigDir, 'no-customSetupFile.json'));
     expect(err).to.contain("must provide 'customSetupFile'");
 
