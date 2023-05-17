@@ -6,6 +6,7 @@ import {
   TestSyncConfig,
   getConfig,
 } from './test-sync-config.js';
+import { getBaseDownloadUrl } from './kysely-versions.js';
 
 const ADAPTED_FROM_REGEX = /SYNC WITH ([^\s]+)/;
 const BEGIN_UNCHANGED_LABEL = 'BEGIN SYNCED CODE';
@@ -30,6 +31,7 @@ async function diffSyncedCode(): Promise<void> {
       "Config file doesn't provide 'localSyncDirs'"
     );
   }
+  const baseUrl = await getBaseDownloadUrl(config);
 
   for (const dir of config.localSyncDirs) {
     const dirPath = path.join(process.cwd(), dir);
@@ -38,7 +40,7 @@ async function diffSyncedCode(): Promise<void> {
       const sourceText = await fsp.readFile(path, 'utf-8');
       const match = sourceText.match(ADAPTED_FROM_REGEX);
       if (match) {
-        const url = createSourceTargetURL(config, match[1]);
+        const url = createSourceTargetURL(config, baseUrl, match[1]);
         const kyselyText = await loadFileFromURL(url);
         diffText(path, sourceText, kyselyText);
       }
@@ -55,17 +57,22 @@ async function diffSyncedCode(): Promise<void> {
   }
 }
 
-function createSourceTargetURL(config: TestSyncConfig, url: string): string {
-  if (url.startsWith(config.__baseCopyRawUrl)) {
-    return url;
-  } else if (url.startsWith(config.__baseCopyRefUrl)) {
-    return (
-      config.__baseCopyRawUrl + url.substring(config.__baseCopyRefUrl.length)
+function createSourceTargetURL(
+  config: TestSyncConfig,
+  baseUrl: string,
+  syncUrl: string
+): string {
+  if (
+    !syncUrl.startsWith(config.__baseSyncRawUrl) &&
+    !syncUrl.startsWith(config.__baseSyncRefUrl)
+  ) {
+    throw new InvalidConfigException(
+      `URL doesn't start with ${config.__baseSyncRefUrl}`
     );
   }
-  throw new InvalidConfigException(
-    `URL doesn't start with ${config.__baseCopyRefUrl}`
-  );
+  const parts = syncUrl.split('/');
+  const branchIndex = parts[5] == 'blob' ? 6 : 5;
+  return baseUrl + parts.slice(branchIndex + 1).join('/');
 }
 
 async function* iterateOverTSFiles(dir: string): AsyncGenerator<string> {

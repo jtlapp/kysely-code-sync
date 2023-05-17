@@ -4,16 +4,16 @@ import * as path from 'path';
 export const CONFIG_FILE_NAME = 'test-sync.json';
 
 const CONFIG_ARG = '--config=';
-const DEFAULT_BASE_COPY_REF_URL =
+const DEFAULT_BASE_SYNC_REF_URL =
   'https://github.com/kysely-org/kysely/blob/master/';
-const DEFAULT_BASE_COPY_RAW_URL =
-  'https://raw.githubusercontent.com/kysely-org/kysely/master/';
+const DEFAULT_BASE_SYNC_RAW_URL =
+  'https://raw.githubusercontent.com/kysely-org/kysely/main';
 
 let config: TestSyncConfig;
 
 export interface TestSyncConfig {
-  __baseCopyRefUrl: string;
-  __baseCopyRawUrl: string;
+  __baseSyncRefUrl: string;
+  __baseSyncRawUrl: string;
   localSyncDirs: string[];
   kyselyTestDir: string;
   kyselyTestFiles: Record<string, string[]>;
@@ -62,13 +62,13 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       );
     }
 
-    config.__baseCopyRefUrl = appendSlash(
-      config.__baseCopyRefUrl,
-      DEFAULT_BASE_COPY_REF_URL
+    config.__baseSyncRefUrl = appendSlash(
+      config.__baseSyncRefUrl,
+      DEFAULT_BASE_SYNC_REF_URL
     );
-    config.__baseCopyRawUrl = appendSlash(
-      config.__baseCopyRawUrl,
-      DEFAULT_BASE_COPY_RAW_URL
+    config.__baseSyncRawUrl = appendSlash(
+      config.__baseSyncRawUrl,
+      DEFAULT_BASE_SYNC_RAW_URL
     );
     config.kyselyTestDir = appendSlash(config.kyselyTestDir, '');
   }

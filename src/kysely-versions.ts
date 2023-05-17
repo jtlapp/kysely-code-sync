@@ -20,8 +20,8 @@ export async function getBaseDownloadUrl(
   const kyselyVersion = getKyselyVersion();
   if (!kyselyVersion) {
     if (
-      !config.__baseCopyRawUrl ||
-      !config.__baseCopyRefUrl.includes(getPackageName())
+      !config.__baseSyncRawUrl ||
+      !config.__baseSyncRefUrl.includes(getPackageName())
     ) {
       throw new InvalidConfigException(
         'Kysely is not installed as a dependency'
