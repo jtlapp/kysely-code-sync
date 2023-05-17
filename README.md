@@ -93,6 +93,10 @@ Before each block of code that you which to keep synchronized with Kysely, add a
 
 <!-- prettier-ignore -->
 ```ts
+// Adapted from https://github.com/kysely-org/kysely/blob/master/test/node/src/test-setup.ts
+
+...
+
 /* BEGIN SYNCED CODE | Copyright (c) 2022 Sami Koskimäki | MIT License */
 export interface Person {
   id: Generated<number>
