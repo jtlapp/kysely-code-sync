@@ -38,7 +38,7 @@ async function installKyselyTests() {
 
   // Create the directory for the downloaded tests, initially empty.
 
-  const kyselySourceDir = join(process.cwd(), config.downloadedTestsDir);
+  const kyselySourceDir = join(process.cwd(), config.downloadDir);
   try {
     await fsp.rm(kyselySourceDir, { recursive: true });
   } catch (e: any) {

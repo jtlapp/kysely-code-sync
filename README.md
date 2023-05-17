@@ -67,8 +67,8 @@ The `load-kysely-tests` command uses the following configuration keys:
 | --- | --- |
 | `kyselyTestDir` | Directory relative to the Kysely root where the desired test files are found. (e.g. `test/node/src`). |
 | `kyselyTestFiles` | Object mapping test names to arrays of test names. If a file in the `kyselyTestDir` directory has name `select.test.ts`, the key is just `select`. The test names are the names of the tests that are to be skipped. |
-| `downloadedTestsDir` | This is the temporary directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
-| `customSetupFile` | This is the path to the test setup code, expressed relative to the files in `downloadedTestsDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
+| `downloadDir` | This is the temporary directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
+| `customSetupFile` | This is the path to the test setup code, expressed relative to the files in `downloadDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
 
 Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
 
@@ -89,7 +89,7 @@ Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg
     "transaction": ["should run multiple transactions in parallel"],
     "update": []
   },
-  "downloadedTestsDir": "test/node/src/temp",
+  "downloadDir": "test/node/src/temp",
   "customSetupFile": "../custom-test-setup.js"
 }
 ```
@@ -201,7 +201,7 @@ export function reportMochaContext(_cx: MochaContext): void {
 
 The trickiest part of modifying the test setup is getting the tests to transpile despite not running the tests against any of its native dialects. There are many ways to do this, and I'll not walk you through it, but you can reference [`kysely-pg-client`'s implementation](https://github.com/jtlapp/kysely-pg-client/blob/main/test/node/src/custom-test-setup.ts). This implementation restricts execution to just the `postgres` dialect.
 
-Set the `KyselyTestDir` configuration key to the directory of the desired test suite. List the test files that you would like to run as keys of the `kyselyTestFiles` object. Only these files of the suite will be downloaded. Each of these file keys takes an array of the test names that will **NOT** be run as part of the local test suite. The downloader will attach a `.skip` qualifier to each of them. Finally, set `downloadedTestsDir` to the directory into which the test files should be downloaded.
+Set the `KyselyTestDir` configuration key to the directory of the desired test suite. List the test files that you would like to run as keys of the `kyselyTestFiles` object. Only these files of the suite will be downloaded. Each of these file keys takes an array of the test names that will **NOT** be run as part of the local test suite. The downloader will attach a `.skip` qualifier to each of them. Finally, set `downloadDir` to the directory into which the test files should be downloaded.
 
 Now you can run `npx load-kysely-tests` to download the test files into the download directory and have them modified for use in the local test suite. It's probably best to call the command on every run of the test, so you don't have to remember to download the files prior to running the test.
 

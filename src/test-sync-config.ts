@@ -17,7 +17,7 @@ export interface TestSyncConfig {
   localSyncDirs: string[];
   kyselyTestDir: string;
   kyselyTestFiles: Record<string, string[]>;
-  downloadedTestsDir: string;
+  downloadDir: string;
   customSetupFile: string;
 }
 
@@ -51,9 +51,9 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
         `${relativeConfigPath} must provide 'kyselyTestDir' for 'kyselyTestFiles'`
       );
     }
-    if (config.kyselyTestFiles && !config.downloadedTestsDir) {
+    if (config.kyselyTestFiles && !config.downloadDir) {
       throw new InvalidConfigException(
-        `${relativeConfigPath} must provide 'downloadedTestsDir' for 'kyselyTestFiles'`
+        `${relativeConfigPath} must provide 'downloadDir' for 'kyselyTestFiles'`
       );
     }
     if (config.kyselyTestFiles && !config.customSetupFile) {

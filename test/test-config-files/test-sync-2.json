@@ -7,6 +7,6 @@
     "test-1": ["should do something 1A", "should do something 1C"],
     "test-2": []
   },
-  "downloadedTestsDir": "test/temp",
+  "downloadDir": "test/temp",
   "customSetupFile": "../custom-test-setup.js"
 }

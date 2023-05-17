@@ -17,7 +17,7 @@ const EXPECTED_TESTS_PATH = join(TEST_DIR, 'expected-tests');
 describe('load-kysely-tests', () => {
   it('should produce the expected test files', async () => {
     const config = await getConfig(TEST_CONFIG_FILE);
-    const downloadPath = join(process.cwd(), config.downloadedTestsDir);
+    const downloadPath = join(process.cwd(), config.downloadDir);
     try {
       // Ensure that the download path starts empty.
       await fsp.rm(downloadPath, { recursive: true });
@@ -71,8 +71,8 @@ describe('load-kysely-tests', () => {
     err = await runCommand(join(testConfigDir, 'no-customSetupFile.json'));
     expect(err).to.contain("must provide 'customSetupFile'");
 
-    err = await runCommand(join(testConfigDir, 'no-downloadedTestsDir.json'));
-    expect(err).to.contain("must provide 'downloadedTestsDir'");
+    err = await runCommand(join(testConfigDir, 'no-downloadDir.json'));
+    expect(err).to.contain("must provide 'downloadDir'");
   });
 });
 
