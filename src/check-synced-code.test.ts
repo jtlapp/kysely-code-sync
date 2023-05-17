@@ -53,7 +53,7 @@ describe('check-synced-code', () => {
     const command = `node ${COMMAND_PATH} --config=${TEST_CONFIG_FILE_2}`;
     const output = await runCommand(TEST_CONFIG_FILE_2);
     expect(output[0]).to.contain(
-      "All synced code segments match Kysely's source"
+      "All synced code blocks match Kysely's source"
     );
     expect(output[1]).equal('');
   });

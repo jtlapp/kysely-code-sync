@@ -11,7 +11,7 @@ const ADAPTED_FROM_REGEX = /Adapted from ([^\s]+)/i;
 const BEGIN_UNCHANGED_LABEL = 'BEGIN SYNCED CODE';
 const END_UNCHANGED_LABEL = 'END SYNCED CODE';
 
-let differingCodeSegments = 0;
+let differingCodeBlocks = 0;
 
 (async () => {
   try {
@@ -43,11 +43,11 @@ async function diffCopiedCode(): Promise<void> {
     }
   }
 
-  if (differingCodeSegments == 0) {
-    console.log("All synced code segments match Kysely's source.\n");
+  if (differingCodeBlocks == 0) {
+    console.log("All synced code blocks match Kysely's source.\n");
   } else {
     console.error(
-      `\n${differingCodeSegments} synced code segments differ from their Kysely source`
+      `\n${differingCodeBlocks} synced code blocks differ from their Kysely source`
     );
     process.exit(1);
   }
@@ -114,7 +114,7 @@ function diffText(path: string, sourceText: string, kyselyText: string): void {
           unchangedLines[firstDifferingLineIndex]
         }`
       );
-      ++differingCodeSegments;
+      ++differingCodeBlocks;
     }
 
     nextUnchangedLineIndex = findNextUnchangedLine(
