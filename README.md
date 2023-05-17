@@ -13,7 +13,7 @@ With this utility, you can run your code against tests that are currently in the
 
 The utility accomplishes this with two development-time commands. The first command is `check-synced-code`, which compares blocks of code that you have borrowed from Kysely with the corresponding code that is currently in Kysely. You label the start and end of each of these blocks within your own code, and the tool reports the differences found.
 
-The second command is `load-kysely-tests`. It downloads selected test files from the Kysely repo and modifies them for local use, storing them in a temporary directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite.
+The second command is `load-kysely-tests`. It downloads selected test files from the Kysely repo and modifies them for local use, storing them in a temporary directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. The command would run with every run of the test suite, so that code always run against the latest Kysely tests.
 
 ## Installation
 
@@ -122,7 +122,7 @@ Run `npx check-synced-code` to compare these blocks with the most recent files i
 
 ## Using `load-kysely-tests`
 
-The `load-kysely-tests` command requires quite a bit of setup. I found it easiest to locally mirror the Kysely test structure and borrow `package.json` test scripts from Kysely. Here is the structure I have working with [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
+The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifes them for local use. But it requires quite a bit of setup. I found it easiest to locally mirror the Kysely test structure and borrow `package.json` test scripts from Kysely. Here is the structure I have working with [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
 
 ```
 test-sync.json
