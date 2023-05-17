@@ -114,7 +114,7 @@ export interface Pet {
 
 The code in this block must match the code in Kysely, including identation, blank lines, and prettier format. To get the right indentation, you may need to bracket code in simple `{ ... }` code blocks. Kysely does not end statements with semi-colons, so you'll need to be sure your prettier is not automatically including them.
 
-Run `npx check-synced-code` to compare these blocks with the most recent files in the Kysely master branch. The tool looks for an exact match. It reports when no match can be found, and when a partial match is found, it reports the first differing line in each block, providing the line number in your local file.
+Run `npx check-synced-code` to compare these blocks with the most recent files in the Kysely master branch. The tool looks for an exact match. It reports when no match can be found, and when a partial match is found, it reports the first differing line in each block, providing the line number in your local file. It's probably best to call this command prior to every build of code that includes synchronized blocks.
 
 ## Using `load-kysely-tests`
 
@@ -171,7 +171,7 @@ The trickiest part of modifying the test setup is getting the tests to transpile
 
 If you aren't using Kysely's `test/node` test suite, you'll need to point the `baseTestRawUrl` configuration key to the suite. List the test files that you would like to run as keys of the `testFiles` object. Only these files of the suite will be downloaded. Each file key takes an array value. This is an array of the test names that will **NOT** be run as part of the local test suite. The downloader will attach a `.skip` qualifier to them. Finally, set `downloadedTestsDir` to the directory into which the test files should be downloaded.
 
-Now you can run `npx load-kysely-tests` to download the test files into the download directory and have them modified for use in the local test suite.
+Now you can run `npx load-kysely-tests` to download the test files into the download directory and have them modified for use in the local test suite. It's probably best to call the command on every run of the test, so you don't have to remember to download the files prior to running the test.
 
 You'll probably also want to add the download directory to your `.gitignore`.
 
@@ -179,7 +179,7 @@ You'll probably also want to add the download directory to your `.gitignore`.
 
 When `check-synced-code` reports differences, or when tests that `load-kysely-tests` has downloaded report test failures, you can't necessarily infer that there is a bug in your code. All you can infer is that something has changed in the Kysely repo that requires your attention. You may only need to make small tweaks to get things running again, or you may find that Kysely has reorganized its code, or you may find that Kysely has indeed added a test that uncovers a bug in your code.
 
-Unlike a traditional test suite, a test suite that employs these commands can (almost certainly will) eventually break without your ever changing a line of code. This is by design. The folks who maintain Kysely are maintaining part of your test suite for you.
+Unlike a traditional test suite, a test suite that employs these commands can (almost certainly will) eventually break without your ever changing a line. This is by design. The folks who maintain Kysely are maintaining part of your test suite for you.
 You are getting some repo maintenance for free.
 
 ## License
