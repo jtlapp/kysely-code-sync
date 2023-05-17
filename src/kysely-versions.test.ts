@@ -1,14 +1,26 @@
 import { expect } from 'chai';
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+import * as fs from 'fs';
+import * as path from 'path';
+chai.use(chaiAsPromised);
 
 import {
   MAX_VERSION,
+  getPackageName,
   getKyselyVersion,
   getKyselySourceURL,
   getMaxVersions,
   getClosestKyselyVersion,
+  getBaseDownloadUrl,
 } from './kysely-versions';
+import { TestSyncConfig } from './test-sync-config';
 
 describe('kysely version support', () => {
+  it("should return the present package's name", () => {
+    expect(getPackageName()).equal('kysely-test-sync');
+  });
+
   it('should return the version of kysely installed as a dependency', () => {
     // Kysely is not locally installed. Not easy to test.
     expect(getKyselyVersion()).equal(null);
@@ -48,5 +60,34 @@ describe('kysely version support', () => {
 
     version = await getClosestKyselyVersion([0, 17, MAX_VERSION]);
     expect(version).equal('0.17.3');
+  });
+
+  it('should fail to get a download URL with a Kysely config', async () => {
+    // because Kysely is not locally installed
+    const configPath = path.join(
+      process.cwd(),
+      'test/test-config-files/valid-for-kysely.json'
+    );
+    const config: TestSyncConfig = JSON.parse(
+      fs.readFileSync(configPath, 'utf-8')
+    );
+
+    await expect(getBaseDownloadUrl(config)).to.be.rejectedWith(
+      'Kysely is not installed as a dependency'
+    );
+  });
+
+  it('should get a download URL for the local test suite', async () => {
+    const configPath = path.join(
+      process.cwd(),
+      'test/test-config-files/test-sync-1.json'
+    );
+    const config: TestSyncConfig = JSON.parse(
+      fs.readFileSync(configPath, 'utf-8')
+    );
+
+    expect(await getBaseDownloadUrl(config)).equal(
+      'https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/'
+    );
   });
 });

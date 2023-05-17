@@ -15,7 +15,7 @@ let differingCodeBlocks = 0;
 
 (async () => {
   try {
-    await diffCopiedCode();
+    await diffSyncedCode();
   } catch (e: any) {
     if (!(e instanceof InvalidConfigException)) throw e;
     console.error(`Failed to difference synced code\n${e.message}\n`);
@@ -23,7 +23,7 @@ let differingCodeBlocks = 0;
   }
 })();
 
-async function diffCopiedCode(): Promise<void> {
+async function diffSyncedCode(): Promise<void> {
   const config = await getConfig();
   if (!config.localSyncDirs) {
     throw new InvalidConfigException(

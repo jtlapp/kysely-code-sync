@@ -1,15 +1,51 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { InvalidConfigException } from './test-sync-config';
+import { InvalidConfigException, TestSyncConfig } from './test-sync-config';
 
 export const MAX_VERSION = 9999999;
 
+const BASE_TEST_RAW_URL =
+  'https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/';
 const KYSELY_RELEASE_URL =
   'https://api.github.com/repos/kysely-org/kysely/releases?per_page=100';
 
 interface GitHubRelease {
   tag_name: string;
+}
+
+export async function getBaseDownloadUrl(
+  config: TestSyncConfig
+): Promise<string> {
+  const kyselyVersion = getKyselyVersion();
+  if (!kyselyVersion) {
+    if (
+      !config.__baseCopyRawUrl ||
+      !config.__baseCopyRefUrl.includes(getPackageName())
+    ) {
+      throw new InvalidConfigException(
+        'Kysely is not installed as a dependency'
+      );
+    }
+    return BASE_TEST_RAW_URL; // for testing kysely-test-sync
+  }
+  // The following code is not tested because its behavior varies
+  // according the installed project's package.json file. However,
+  // each of the function is individually tested.
+  const maxVersions = getMaxVersions(kyselyVersion);
+  const nearestVersion = await getClosestKyselyVersion(maxVersions);
+  console.log(`Downloading tests for Kysely version ${nearestVersion}.\n`);
+  return getKyselySourceURL(nearestVersion);
+}
+
+/**
+ * Returns the name of the current package.
+ * @returns A string
+ */
+export function getPackageName(): string {
+  const packageJsonPath = path.join(process.cwd(), 'package.json');
+  const json = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  return json.name;
 }
 
 /**
