@@ -34,7 +34,7 @@ export async function getBaseDownloadUrl(
   // each of the function is individually tested.
   const maxVersions = getMaxVersions(kyselyVersion);
   const nearestVersion = await getClosestKyselyVersion(maxVersions);
-  console.log(`Syncing with Kysely version ${nearestVersion} at`);
+  console.log(`Syncing with Kysely release ${nearestVersion} at`);
   console.log(
     `  https://github.com/kysely-org/kysely/tree/${nearestVersion}\n`
   );
