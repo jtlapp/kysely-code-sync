@@ -29,7 +29,7 @@ export function getKyselyVersion(): string | null {
  * @returns A URL
  */
 export function getKyselySourceURL(version: string): string {
-  return `https://github.com/kysely-org/kysely/${version}/`;
+  return `https://raw.githubusercontent.com/kysely-org/kysely/${version}/`;
 }
 
 /**

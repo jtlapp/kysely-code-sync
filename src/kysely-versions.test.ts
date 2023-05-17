@@ -16,7 +16,7 @@ describe('kysely version support', () => {
 
   it('gshould return the GitHub URL for the given version', () => {
     expect(getKyselySourceURL('1.2.3')).equal(
-      `https://github.com/kysely-org/kysely/1.2.3/`
+      `https://raw.githubusercontent.com/kysely-org/kysely/1.2.3/`
     );
   });
 
@@ -34,8 +34,8 @@ describe('kysely version support', () => {
   });
 
   it('should return the closest released version of kysely', async () => {
-    // GitHub has a maximum of 60 requests per hour for unauthenticated users,
-    // so keep these testt cases to a minimum.
+    // GitHub has a maximum of 60 requests per hour for unauthenticated
+    // users, so keep these testt cases to a minimum.
 
     let version = await getClosestKyselyVersion([0, 24, 2]);
     expect(version).equal('0.24.2');
@@ -45,9 +45,6 @@ describe('kysely version support', () => {
 
     version = await getClosestKyselyVersion([0, 23, MAX_VERSION]);
     expect(version).equal('0.23.5');
-
-    version = await getClosestKyselyVersion([0, 18, 0]);
-    expect(version).equal('0.18.0');
 
     version = await getClosestKyselyVersion([0, 17, MAX_VERSION]);
     expect(version).equal('0.17.3');
