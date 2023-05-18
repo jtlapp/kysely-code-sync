@@ -72,10 +72,9 @@ The `load-kysely-tests` command uses the following configuration keys:
 | `downloadDir` | *Required.* This is the directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
 | `customSetupFile` | *Required.* This is the path to the test setup code, expressed relative to the files in `downloadDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
 
-Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
+Here is an example `test-sync.json` from the [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client) repo:
 
 ```json
-// test-sync.json
 {
   "localSyncDirs": ["src", "test/node/src"],
   "kyselyTestDir": "test/node/src",
@@ -252,7 +251,7 @@ Syncing with Kysely release 0.24.2...
 
 ## Managing the Test Suite
 
-These tools should not be run as part of the test suite proper. Instead, they should be run when you wish to upgrade your project for a newer version of Kysely.
+These tools should not be run as part of the test suite proper. Instead, they should be run when you wish to upgrade your project for a newer version of Kysely. See the [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client) repo for an example implementation of the approach described here.
 
 Establish the Kysely release you would like to use and visit that release on GitHub to examine its code. Acquire the code you want to borrow and decide which tests of that release you wish to use. Use `load-kysely-tests` to locally install those tests and then adapt your borrowed code to get the tests to pass. Do not modify the downloaded test files.
 
