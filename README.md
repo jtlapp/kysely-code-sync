@@ -68,7 +68,7 @@ The `load-kysely-tests` command uses the following configuration keys:
 | --- | --- |
 | `kyselyVersion` | *Optional.* Version of Kysely from which to pull test files. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
 | `kyselyTestDir` | *Required.* Directory relative to the Kysely root where the desired test files are found. (e.g. `test/node/src`). |
-| `kyselyTestFiles` | *Required.* Object mapping test names to arrays of test names. If a file in the `kyselyTestDir` directory has name `select.test.ts`, the key is just `select`. The test names are the names of the tests that are to be skipped. |
+| `kyselyTestFiles` | *Required.* Object mapping file names to arrays of test names. The test names are the names of the tests that are to be skipped. |
 | `downloadDir` | *Required.* This is the directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
 | `customSetupFile` | *Required.* This is the path to the test setup code, expressed relative to the files in `downloadDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
 
@@ -80,16 +80,16 @@ Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg
   "localSyncDirs": ["src", "test/node/src"],
   "kyselyTestDir": "test/node/src",
   "kyselyTestFiles": {
-    "delete": [],
-    "execute": [],
-    "insert": [],
-    "select": [
+    "delete.test.ts": [],
+    "execute.test.ts": [],
+    "insert.test.ts": [],
+    "select.test.ts": [
       "should release connection on premature async iterator stop",
       "should release connection on premature async iterator stop when using a specific chunk size",
       "should throw an error if the cursor implementation is not provided for the postgres dialect"
     ],
-    "transaction": ["should run multiple transactions in parallel"],
-    "update": []
+    "transaction.test.ts": ["should run multiple transactions in parallel"],
+    "update.test.ts": []
   },
   "downloadDir": "test/node/src/downloads",
   "customSetupFile": "../custom-test-setup.js"

@@ -42,7 +42,7 @@ async function installKyselyTests() {
 
   const baseDownloadUrl = await getBaseDownloadUrl(config);
   for (const fileEntry of Object.entries(config.kyselyTestFiles)) {
-    const fileName = `${fileEntry[0]}.test.ts`;
+    const fileName = fileEntry[0];
     const url = `${baseDownloadUrl}${config.kyselyTestDir}${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);
     const response = await fetch(url);

@@ -3,8 +3,8 @@
   "__baseSyncRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
   "localSyncDirs": ["test/mock-local-files-1", "test/mock-local-files-2"],
   "kyselyTestFiles": {
-    "test-1": ["should do something 1A", "should do something 1C"],
-    "test-2": ["should do something 2.1B"]
+    "test-1.test.ts": ["should do something 1A", "should do something 1C"],
+    "test-2.test.ts": ["should do something 2.1B"]
   },
   "downloadDir": "test/temp",
   "customSetupFile": "../custom-test-setup.js"
