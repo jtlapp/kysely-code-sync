@@ -58,7 +58,7 @@ The `check-synced-code` command only uses the configuration key:
 <!-- prettier-ignore -->
 | Key | Description |
 | --- | --- |
-| `kyselyVersion` | *Optional.* Version of Kysely against which to sync code. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
+| `kyselyVersion` | *Optional.* Version of Kysely with which to compare code. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
 | `localSyncDirs` | *Required.* An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
 
 The `load-kysely-tests` command uses the following configuration keys:
