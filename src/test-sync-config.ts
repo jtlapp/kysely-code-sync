@@ -4,6 +4,7 @@ import * as path from 'path';
 export const CONFIG_FILE_NAME = 'test-sync.json';
 
 const CONFIG_ARG = '--config=';
+const VERSION_ARG = '--version=';
 const DEFAULT_BASE_SYNC_REF_URL =
   'https://github.com/kysely-org/kysely/blob/master/';
 const DEFAULT_BASE_SYNC_RAW_URL =
@@ -14,6 +15,7 @@ let config: TestSyncConfig;
 export interface TestSyncConfig {
   __baseSyncRefUrl: string;
   __baseSyncRawUrl: string;
+  kyselyVersion?: string;
   localSyncDirs: string[];
   kyselyTestDir: string;
   kyselyTestFiles: Record<string, string[]>;
@@ -71,6 +73,13 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       DEFAULT_BASE_SYNC_RAW_URL
     );
     config.kyselyTestDir = appendSlash(config.kyselyTestDir, '');
+
+    const versionArg = process.argv.filter((arg) =>
+      arg.startsWith(VERSION_ARG)
+    );
+    if (versionArg[0]) {
+      config.kyselyVersion = versionArg[0].substring(VERSION_ARG.length);
+    }
   }
   return config;
 }

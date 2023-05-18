@@ -17,8 +17,8 @@ interface GitHubRelease {
 export async function getBaseDownloadUrl(
   config: TestSyncConfig
 ): Promise<string> {
-  const kyselyVersion = getKyselyVersion();
-  if (!kyselyVersion) {
+  const currentVersion = getKyselyVersion();
+  if (!currentVersion) {
     if (
       !config.__baseSyncRawUrl ||
       !config.__baseSyncRefUrl.includes(getPackageName())
@@ -32,13 +32,14 @@ export async function getBaseDownloadUrl(
   // The following code is not tested because its behavior varies
   // according the installed project's package.json file. However,
   // each of the function is individually tested.
-  const maxVersions = getMaxVersions(kyselyVersion);
-  const nearestVersion = await getClosestKyselyVersion(maxVersions);
-  console.log(`Syncing with Kysely release ${nearestVersion}...`);
-  console.log(
-    `  https://github.com/kysely-org/kysely/tree/${nearestVersion}\n`
-  );
-  return getKyselySourceURL(nearestVersion);
+  let syncVersion = config.kyselyVersion;
+  if (!syncVersion) {
+    const maxVersions = getMaxVersions(currentVersion);
+    syncVersion = await getClosestKyselyVersion(maxVersions);
+  }
+  console.log(`Syncing with Kysely release ${syncVersion}...`);
+  console.log(`  https://github.com/kysely-org/kysely/tree/${syncVersion}\n`);
+  return getKyselySourceURL(syncVersion);
 }
 
 /**

@@ -1,6 +1,6 @@
 # kysely-test-sync
 
-Utility for keeping code and tests in sync with the Kysely repo
+Utility for keeping code and tests in sync with the [Kysely repo](https://github.com/kysely-org/kysely)
 
 ## Introduction
 
@@ -13,9 +13,9 @@ With this utility, you can run your code against tests in published versions of 
 
 The utility accomplishes this with two development-time commands. The first command is `check-synced-code`, which compares blocks of code that you have borrowed from Kysely with the corresponding code in Kysely releases. You label the start and end of each of these blocks within your own code, and the tool reports the differences found. The command is especially useful for adapting tests.
 
-The second command is `load-kysely-tests`. It downloads selected test files from Kysely releases and modifies them for local use, storing them in a temporary directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. You would normally execute the command before each run of tests, so that you're using the latest possible tests.
+The second command is `load-kysely-tests`. It downloads selected test files from Kysely releases and modifies them for local use, storing them in a local directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. You would normally execute the command only when you want to upgrade the test suite for a newer release of Kysely.
 
-The utility respects the semantic version of your package's Kysely installation, always referencing the code of the most recent compatible release of Kysely.
+You can have the utility sync against a particular release, or you can have the utility heed the semantic version of your Kysely installation and sync with the most recent compatible release of Kysely.
 
 ## Installation
 
@@ -29,7 +29,7 @@ yarn add -D kysely-test-sync
 pnpm add -D kysely-test-sync
 ```
 
-To run downloaded Kysely tests, you'll also need to install Kysely and [Kysely's test dependencies](https://github.com/kysely-org/kysely/blob/master/package.json), which you may need to manually keep in sync with the appropriate Kysely release. These are the additional dependencies at the time of this writing:
+To run downloaded Kysely tests, you'll also need to install Kysely and [Kysely's test dependencies](https://github.com/kysely-org/kysely/blob/master/package.json), which you'll need to manually keep in sync with the appropriate Kysely release. These are the additional dependencies at the time of this writing:
 
 ```json
   "devDependencies": {
@@ -58,17 +58,19 @@ The `check-synced-code` command only uses the configuration key:
 <!-- prettier-ignore -->
 | Key | Description |
 | --- | --- |
-| `localSyncDirs` | An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
+| `kyselyVersion` | Optional. Version of Kysely against which to sync code. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
+| `localSyncDirs` | Required. An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
 
 The `load-kysely-tests` command uses the following configuration keys:
 
 <!-- prettier-ignore -->
 | Key | Description |
 | --- | --- |
-| `kyselyTestDir` | Directory relative to the Kysely root where the desired test files are found. (e.g. `test/node/src`). |
-| `kyselyTestFiles` | Object mapping test names to arrays of test names. If a file in the `kyselyTestDir` directory has name `select.test.ts`, the key is just `select`. The test names are the names of the tests that are to be skipped. |
-| `downloadDir` | This is the temporary directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
-| `customSetupFile` | This is the path to the test setup code, expressed relative to the files in `downloadDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
+| `kyselyVersion` | Optional. Version of Kysely from which to pull test files. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
+| `kyselyTestDir` | Required. Directory relative to the Kysely root where the desired test files are found. (e.g. `test/node/src`). |
+| `kyselyTestFiles` | Required. Object mapping test names to arrays of test names. If a file in the `kyselyTestDir` directory has name `select.test.ts`, the key is just `select`. The test names are the names of the tests that are to be skipped. |
+| `downloadDir` | Required. This is the directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
+| `customSetupFile` | Required. This is the path to the test setup code, expressed relative to the files in `downloadDir`. The file replaces the `test-setup.ts` found in the Kysely test suite. You'll want to copy and modify Kysely's file. |
 
 Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg-client):
 
@@ -89,17 +91,25 @@ Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg
     "transaction": ["should run multiple transactions in parallel"],
     "update": []
   },
-  "downloadDir": "test/node/src/temp",
+  "downloadDir": "test/node/src/downloads",
   "customSetupFile": "../custom-test-setup.js"
 }
 ```
 
 You can specify a particular configuration file via the `--config` option, giving the file any name you want. It is expressed relative to the current working directory. Examples:
 
-```
+```bash
 npx check-synced-code --config=test/test-sync.json
 
 npx load-kysely-tests --config=config-files/config-file-1.json
+```
+
+You can also use the `--version` option to specify a particular version of Kysely against which to sync the data, overriding the configuration. Examples:
+
+```bash
+npx check-synced-code --version=0.42.2
+
+npx load-kysely-tests --version=0.23.0
 ```
 
 You'll use separate configuration files for running tests from different Kysely directories.
@@ -146,7 +156,7 @@ When differences are found, they are written to `stderr` and the command exits w
 
 ## Using `load-kysely-tests`
 
-The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifies them for local use. It does not compile or run the tests. You'll need to provide the scripts that compile and run the tests.
+The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifies them for local use. You'll need to provide the scripts that compile and run the tests, as it does not provide them.
 
 This command requires quite a bit of setup. I found it easiest to locally mirror the Kysely test structure and borrow some of Kysely's `package.json` test scripts.
 
@@ -158,7 +168,7 @@ test/
     node/
         dist/  <-- output of test build
         src/
-            temp/  <-- directory into which Kysely tests download
+            downloads/  <-- directory into which Kysely tests download
         custom-test-setup.ts
         custom-select.test.ts
         custom-transaction.test.ts
@@ -208,13 +218,17 @@ The trickiest part of modifying the test setup is getting the tests to transpile
 
 Also create the configuration file. Set the `KyselyTestDir` key to the directory of the desired test suite. List the test files that you would like to run as keys of the `kyselyTestFiles` object. Only these files of the suite will be downloaded. Each of these file keys takes an array of the names of tests that will **NOT** be run as part of the local test suite; the downloader attaches a `.skip` qualifier to each of them. Finally, set `downloadDir` to the directory into which the test files should be downloaded.
 
-Now you can run `npx load-kysely-tests` to download the test files into the download directory, modified for use in the local test suite. You'll need to decide whether to run the command on every run of the test or only ever update the tests manually.
-
-You'll probably also want to add the download directory to `.gitignore`.
+Now you can run `npx load-kysely-tests` to download the test files into the download directory, modified for use in the local test suite.
 
 ## Semantic Versioning of Tests
 
-When you run `check-synced-code` or `load-kysely-tests`, the command looks up the version of Kysely that's installed, according to `package.json`. It then identifies the most recent Kysely release that is supposed to be compatible with this version. Synced code blocks are compared with this release and test files are downloaded from this release.
+When you run `check-synced-code` or `load-kysely-tests`, the command needs to decide which version of Kysely to sync with. The version is selected by the following procedure:
+
+1. If the command includes the `--version` option, this is the version used.
+2. Otherwise, if the configuration file includes the `kyselyVersion` key, this is the version used.
+3. Otherwise, the command looks up the version of Kysely that's installed, according to `package.json`. It then identifies the most recent Kysely release that is compatible with this version according to semantic versioning.
+
+Upon selecting a version, synced code blocks are compared with this release having this version, and test files are downloaded from this release having this version.
 
 The most recent compatible release is determined as follows:
 
@@ -236,17 +250,17 @@ Syncing with Kysely release 0.24.2...
   https://github.com/kysely-org/kysely/tree/0.24.2
 ```
 
-## Implications of this Approach
+## Managing the Test Suite
 
-When `check-synced-code` reports differences, or when tests that `load-kysely-tests` has downloaded report test failures, you can't necessarily infer that there is a bug in your code. All you can infer is that a more recent release changed something that requires your attention, because the newer code is somehow incompatible.
+These tools should not be run as part of the test suite proper. Instead, they should be run when you wish to upgrade your project for a newer version of Kysely.
 
-Unlike a traditional test suite, a test suite that employs these commands can (almost certainly will) eventually break without your ever changing a line. This is by design. The folks who maintain Kysely are maintaining part of your test suite for you. You are getting some repo maintenance for free.
+Establish the Kysely release you would like to use and visit that release on GitHub to examine its code. Acquire the code you want to borrow and decide which tests of that release you wish to use. Use `load-kysely-tests` to locally install those tests and then adapt your borrowed code to get the tests to pass. Do not modify the downloaded test files.
 
-One downside is that you will have to continually maintain the repo as Kysely changes, in order to keep tests passing. But that's only a downside for you, not for your users.
+Now you have a project that builds and passes its tests. Commit the project to your repository, including the downloaded tests. Provide a script that runs this test suite but does not call `load-kysely-tests` or `check-synced-code`.
 
-Another downside is that a user who clones your repo and runs your tests may find that the tests do not pass. This does not look good. However, assuming that the tests did once pass, this is actually very good news for the user, as the user has just uncovered a potential problem that was not previously known, enabling the problem to be resolved and producing a more reliable product.
+Run the commands when you want to upgrade your project for compatibility with a more recent release of Kysely. When `check-synced-code` reports differences, or when tests that `load-kysely-tests` has downloaded report test failures, you can't necessarily infer that there is a bug in your project. All you can infer is that a more recent release changed something that requires your attention because the newer code is somehow incompatible. You are essentially collaborating with the folks who maintain Kysely. They are maintaining part of your test suite for you, but you have to periodically do the local integration work.
 
-To avoid these downsides, you can fix the Kysely installation to an exact version, such as by using the `=` prefix. Then you have complete control over whether tests pass and when to spend time getting your code working with the latest version of Kysely.
+It is probably unwise to run these commands as part of your test suite proper, because the tests could break on even patch updates to Kysely. It is not reasonable for you to immediately update the project for each new release, and it would not look good for a user to install your project, run the tests, and find that they fail. However, it may be helpful to provide a script that runs the commands using semantic versioning, so that users have a way to checking the project against the most recent version of Kysely with which it is supposed to be compatible. Collectively, your users could be running this check more often than you do, and they could be reporting to you when its time to work on an upgrade.
 
 ## License
 
