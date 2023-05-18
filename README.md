@@ -15,7 +15,7 @@ The utility accomplishes this with two development-time commands. The first comm
 
 The second command is `load-kysely-tests`. It downloads selected test files from Kysely releases and modifies them for local use, storing them in a local directory. You have complete control over which test files are downloaded. For each file, you can specify which tests are not to be run as part of the local test suite. You would normally execute the command only when you want to upgrade the test suite for a newer release of Kysely.
 
-You can have the utility sync against a particular release, or you can have the utility heed the semantic version of your Kysely installation and sync with the most recent compatible release of Kysely.
+You can have the utility sync with a particular release, or you can have the utility heed the semantic version of your Kysely installation and sync with the most recent compatible release of Kysely.
 
 ## Installation
 
