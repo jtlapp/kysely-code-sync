@@ -8,7 +8,7 @@ import {
 } from './test-sync-config.js';
 import { KYSELY_TREE_URL, getBaseDownloadUrl } from './kysely-versions.js';
 
-const VERSION_FILE_NAME = 'kysely-version.txt';
+const VERSION_FILE_NAME = '_kysely-version.txt';
 const HEADER_LINE =
   '// Copied from Kysely | MIT License | Copyright (c) 2022 Sami Koskimäki\n';
 

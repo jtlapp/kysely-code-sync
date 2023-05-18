@@ -156,7 +156,7 @@ When differences are found, they are written to `stderr` and the command exits w
 
 ## Using `load-kysely-tests`
 
-The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifies them for local use. It also puts `kysely-version.txt` in the downloads directory to indicate the downloaded version, including its URL. You'll need to provide the scripts that compile and run the tests, as the command does not provide them.
+The `load-kysely-tests` command dynamically downloads test files from the Kysely repo and modifies them for local use. It also puts `_kysely-version.txt` in the downloads directory to indicate the downloaded version, including its URL. You'll need to provide the scripts that compile and run the tests, as the command does not provide them.
 
 This command requires quite a bit of setup. I found it easiest to locally mirror the Kysely test structure and borrow some of Kysely's `package.json` test scripts.
 
