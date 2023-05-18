@@ -96,7 +96,7 @@ Here is an example from [`kysely-pg-client`](https://github.com/jtlapp/kysely-pg
 }
 ```
 
-You can specify a particular configuration file via the `--config` option, giving the file any name you want. It is expressed relative to the current working directory. Examples:
+You can specify a particular configuration file via the `--config` option, giving the file any name you want, provided it has extension `.json`. Express the file relative to the current working directory. Examples:
 
 ```bash
 npx check-synced-code --config=test/test-sync.json

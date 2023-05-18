@@ -7,8 +7,11 @@ export const MAX_VERSION = 9999999;
 
 const BASE_TEST_RAW_URL =
   'https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/';
-const KYSELY_RELEASE_URL =
+const KYSELY_RELEASES_URL =
   'https://api.github.com/repos/kysely-org/kysely/releases?per_page=100';
+const KYSELY_VERSION_URL =
+  'https://raw.githubusercontent.com/kysely-org/kysely/';
+const KYSELY_TREE_URL = 'https://github.com/kysely-org/kysely/tree/';
 
 interface GitHubRelease {
   tag_name: string;
@@ -38,7 +41,7 @@ export async function getBaseDownloadUrl(
     syncVersion = await getClosestKyselyVersion(maxVersions);
   }
   console.log(`Syncing with Kysely release ${syncVersion}...`);
-  console.log(`  https://github.com/kysely-org/kysely/tree/${syncVersion}\n`);
+  console.log(`  ${KYSELY_TREE_URL}${syncVersion}\n`);
   return getKyselySourceURL(syncVersion);
 }
 
@@ -69,7 +72,7 @@ export function getKyselyVersion(): string | null {
  * @returns A URL
  */
 export function getKyselySourceURL(version: string): string {
-  return `https://raw.githubusercontent.com/kysely-org/kysely/${version}/`;
+  return `${KYSELY_VERSION_URL}${version}/`;
 }
 
 /**
@@ -110,7 +113,7 @@ export function getMaxVersions(version: string): [number, number, number] {
 export async function getClosestKyselyVersion(
   maxVersions: [number, number, number]
 ): Promise<string> {
-  let response = await fetch(KYSELY_RELEASE_URL + '&page=1');
+  let response = await fetch(KYSELY_RELEASES_URL + '&page=1');
   let page = 1;
   while (response.ok) {
     const releases: GitHubRelease[] = await response.json();
@@ -127,7 +130,7 @@ export async function getClosestKyselyVersion(
         return versions.join('.');
       }
     }
-    response = await fetch(`${KYSELY_RELEASE_URL}&page=${++page}`);
+    response = await fetch(`${KYSELY_RELEASES_URL}&page=${++page}`);
   }
   throw new InvalidConfigException(
     'Could not find a version of Kysely <= ' + maxVersions.join('.')

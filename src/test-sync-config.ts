@@ -31,6 +31,11 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       : configArg[0]
       ? configArg[0].substring(CONFIG_ARG.length)
       : CONFIG_FILE_NAME;
+    if (!/\.json$/.test(relativeConfigPath)) {
+      throw new InvalidConfigException(
+        `Config file must have a .json extension: ${relativeConfigPath}`
+      );
+    }
     const absoluteConfigPath = path.join(process.cwd(), relativeConfigPath);
 
     try {
