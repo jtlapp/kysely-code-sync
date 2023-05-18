@@ -51,7 +51,9 @@ async function installKyselyTests() {
     const localFilePath = join(kyselySourceDir, `${fileName}`);
     const response = await fetch(downloadUrl);
     if (!response.ok) {
-      throw Error(`Failed to load ${downloadUrl}: ${response.statusText}`);
+      throw new InvalidConfigException(
+        `Failed to load ${downloadUrl}: ${response.statusText}`
+      );
     }
     const kyselySource = tweakKyselySource(
       config,

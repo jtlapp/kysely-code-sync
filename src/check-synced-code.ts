@@ -91,7 +91,9 @@ async function* iterateOverTSFiles(dir: string): AsyncGenerator<string> {
 async function loadFileFromURL(url: string): Promise<string> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw Error(`Failed to load ${url}: ${response.statusText}`);
+    throw new InvalidConfigException(
+      `Failed to load ${url}: ${response.statusText}`
+    );
   }
   return await response.text();
 }
