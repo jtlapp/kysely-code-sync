@@ -84,6 +84,13 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
     );
     if (versionArg[0]) {
       config.kyselyVersion = versionArg[0].substring(VERSION_ARG.length);
+      if (
+        !/(^\d+\.\d+\.\d+)|([a-zA-Z][-a-zA-Z0-9]*)$/.test(config.kyselyVersion)
+      ) {
+        throw new InvalidConfigException(
+          `Invalid version or branch: ${config.kyselyVersion}`
+        );
+      }
     }
   }
   return config;
