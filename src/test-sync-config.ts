@@ -8,7 +8,7 @@ const VERSION_ARG = '--version=';
 const DEFAULT_BASE_SYNC_REF_URL =
   'https://github.com/kysely-org/kysely/blob/master/';
 const DEFAULT_BASE_SYNC_RAW_URL =
-  'https://raw.githubusercontent.com/kysely-org/kysely/main';
+  'https://raw.githubusercontent.com/kysely-org/kysely/master/';
 
 let config: TestSyncConfig;
 
