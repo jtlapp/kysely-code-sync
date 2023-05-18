@@ -122,7 +122,7 @@ Make sure that any code you want synchronized with Kysely is in a directory list
 
 In a comment at the start of the file, include the words `SYNC WITH <URL>`, where `<URL>` is the GitHub URL for the file that contains the code you copied from. This can be either a "blob" URL or a "raw" URL. `SYNC WITH` must be uppercase.
 
-Before each block of code that you which to keep synchronized with Kysely, add a comment including the exact phrase `BEGIN SYNCED CODE`, including letter case. After each of these blocks of code, include a comment with the exact phrase `END SYNCED CODE`. For example:
+Before each block of code that you which to keep synchronized with Kysely, add a comment including the exact phrase `BEGIN SYNCED CODE`, including letter case. After each of these blocks of code, include a comment with the exact phrase `END SYNCED CODE`. The comment style you use doesn't matter. Here is an example:
 
 <!-- prettier-ignore -->
 ```ts
@@ -130,7 +130,7 @@ Before each block of code that you which to keep synchronized with Kysely, add a
 
 ...
 
-/* BEGIN SYNCED CODE | Copyright (c) 2022 Sami Koskimäki | MIT License */
+// BEGIN SYNCED CODE | Copyright (c) 2022 Sami Koskimäki | MIT License
 export interface Person {
   id: Generated<number>
   first_name: string | null
@@ -145,7 +145,7 @@ export interface Pet {
   owner_id: number
   species: 'dog' | 'cat' | 'hamster'
 }
-/* END SYNCED CODE */
+// END SYNCED CODE
 ```
 
 The code in this block must match the code in Kysely, including identation, blank lines, and prettier format. To get matching indentation, you may need to further bracket code in simple `{ ... }` code blocks. Kysely does not end statements with semi-colons, so you'll need to be sure your prettier is not automatically including them.
