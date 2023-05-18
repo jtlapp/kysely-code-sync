@@ -3,6 +3,7 @@ import * as fs from 'fs';
 
 import { InvalidConfigException, TestSyncConfig } from './test-sync-config';
 
+export const KYSELY_TREE_URL = 'https://github.com/kysely-org/kysely/tree/';
 export const MAX_VERSION = 9999999;
 
 const BASE_TEST_RAW_URL =
@@ -11,7 +12,6 @@ const KYSELY_RELEASES_URL =
   'https://api.github.com/repos/kysely-org/kysely/releases?per_page=100';
 const KYSELY_VERSION_URL =
   'https://raw.githubusercontent.com/kysely-org/kysely/';
-const KYSELY_TREE_URL = 'https://github.com/kysely-org/kysely/tree/';
 
 interface GitHubRelease {
   tag_name: string;

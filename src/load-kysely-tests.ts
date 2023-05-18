@@ -6,8 +6,9 @@ import {
   getConfig,
   InvalidConfigException,
 } from './test-sync-config.js';
-import { getBaseDownloadUrl } from './kysely-versions.js';
+import { KYSELY_TREE_URL, getBaseDownloadUrl } from './kysely-versions.js';
 
+const VERSION_FILE_NAME = 'kysely-version.txt';
 const HEADER_LINE =
   '// Copied from Kysely | MIT License | Copyright (c) 2022 Sami Koskimäki\n';
 
@@ -61,6 +62,15 @@ async function installKyselyTests() {
     );
     await fsp.writeFile(localFilePath, kyselySource);
   }
+
+  // Add a file indicating the version and base URL.
+
+  const version = baseDownloadUrl.split('/')[5];
+  const versionFile = join(kyselySourceDir, VERSION_FILE_NAME);
+  await fsp.writeFile(
+    versionFile,
+    `kysely version: ${version}\n${KYSELY_TREE_URL}${version}`
+  );
 }
 
 function tweakKyselySource(
