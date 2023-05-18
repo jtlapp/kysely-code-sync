@@ -262,7 +262,7 @@ Run these commands when you want to upgrade your project for compatibility with 
 
 It is probably unwise to run these commands as part of your test suite proper, because the tests could break on even patch updates to Kysely. It is not reasonable for you to immediately update the project for each new release, and it would not look good for a user to install your project, run the tests, and find that they fail.
 
-It may be helpful to provide and document a script that runs the commands using semantic versioning, so that users have a way to check the project against more recent versions of Kysely. The project is supposed to be compatible with semantically equivalent versions, after all. Collectively, your users could be running this check more often than you do, and they could be reporting to you when its time to work on an upgrade. You could use a second configuration file if you don't want this run to overwrite the committed, working tests.
+It may be helpful to provide and document a script that runs the commands using semantic versioning, so that users have a way to check the project against more recent versions of Kysely. The project is supposed to be compatible with semantically equivalent versions, after all. Collectively, your users could be running this check more often than you do, and they could be reporting to you when its time to work on an upgrade. If you don't want this run to overwrite the committed, working tests, you could use a second configuration file indicating a second downloads directory in a second test directory. You'll want symbolic links for the custom files that need to be shared between the two test directories.
 
 ## License
 
