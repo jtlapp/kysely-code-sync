@@ -1,3 +1,6 @@
+// Copied from Kysely | MIT License | Copyright (c) 2022 Sami Koskimäki
+// https://github.com/jtlapp/kysely-test-sync/blob/main/test/mock-kysely-tests/test-2.test.ts
+
 import { reportMochaContext } from '../custom-test-setup.js';
 import { Something } from 'kysely';
 import { setup } from '../custom-test-setup.js';

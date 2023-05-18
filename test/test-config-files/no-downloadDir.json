@@ -1,6 +1,6 @@
 {
-  "__baseSyncRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
-  "__baseSyncRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
+  "__baseSyncRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/",
+  "__baseSyncRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/",
   "kyselyTestDir": "test/mock-kysely-tests/",
   "kyselyTestFiles": {
     "test-1.test.ts": ["should do something 1A", "should do something 1C"],

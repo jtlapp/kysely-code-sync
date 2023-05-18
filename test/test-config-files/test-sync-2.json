@@ -1,6 +1,6 @@
 {
-  "__baseSyncRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/main/",
-  "__baseSyncRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/main/",
+  "__baseSyncRefUrl": "https://github.com/jtlapp/kysely-test-sync/blob/",
+  "__baseSyncRawUrl": "https://raw.githubusercontent.com/jtlapp/kysely-test-sync/",
   "kyselyTestDir": "test/mock-kysely-tests/",
   "localSyncDirs": ["test/mock-local-files-3"],
   "kyselyTestFiles": {

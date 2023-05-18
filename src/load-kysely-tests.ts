@@ -8,6 +8,9 @@ import {
 } from './test-sync-config.js';
 import { getBaseDownloadUrl } from './kysely-versions.js';
 
+const HEADER_LINE =
+  '// Copied from Kysely | MIT License | Copyright (c) 2022 Sami Koskimäki\n';
+
 (async () => {
   try {
     await installKyselyTests();
@@ -43,14 +46,15 @@ async function installKyselyTests() {
   const baseDownloadUrl = await getBaseDownloadUrl(config);
   for (const fileEntry of Object.entries(config.kyselyTestFiles)) {
     const fileName = fileEntry[0];
-    const url = `${baseDownloadUrl}${config.kyselyTestDir}${fileName}`;
+    const downloadUrl = `${baseDownloadUrl}${config.kyselyTestDir}${fileName}`;
     const localFilePath = join(kyselySourceDir, `${fileName}`);
-    const response = await fetch(url);
+    const response = await fetch(downloadUrl);
     if (!response.ok) {
-      throw Error(`Failed to load ${url}: ${response.statusText}`);
+      throw Error(`Failed to load ${downloadUrl}: ${response.statusText}`);
     }
     const kyselySource = tweakKyselySource(
       config,
+      downloadUrl,
       fileName,
       await response.text(),
       fileEntry[1]
@@ -61,6 +65,7 @@ async function installKyselyTests() {
 
 function tweakKyselySource(
   config: TestSyncConfig,
+  downloadUrl: string,
   fileName: string,
   source: string,
   excludedTests: string[]
@@ -135,5 +140,13 @@ function tweakKyselySource(
         source.substring(testNameOffset - 1);
     }
   }
+
+  // Add header lines.
+
+  const version = downloadUrl.split('/')[5];
+  source =
+    HEADER_LINE +
+    `// ${config.__baseSyncRefUrl}${version}/${config.kyselyTestDir}${fileName}\n\n` +
+    source;
   return source;
 }
