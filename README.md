@@ -1,10 +1,10 @@
 # kysely-test-sync
 
-Utility for keeping code and tests in sync with the [Kysely repo](https://github.com/kysely-org/kysely)
+Utility for keeping code and tests in sync with the Kysely repo
 
 ## Introduction
 
-With this utility, you can run your code against tests in published versions of the Kysely repo. Semantic versioning determines the appropriate release of Kysely to use, allowing code to run against newer releases that are supposed to be compatible. The utility is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
+With this utility, you can run your code against tests in published versions of the [Kysely](https://github.com/kysely-org/kysely) repo. Semantic versioning determines the appropriate release of Kysely to use, allowing code to run against newer releases that are supposed to be compatible. The utility is useful for testing Kysely dialects or other Kysely extensions and provides the following benefits:
 
 1. It allows you to have confidence that Kysely continues to work as expected under the extension, that you didn't accidentally overlook something.
 2. It allows you to benefit from new tests that are added to Kysely.
