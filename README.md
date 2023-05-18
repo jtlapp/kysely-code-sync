@@ -58,7 +58,7 @@ The `check-synced-code` command only uses the configuration key:
 <!-- prettier-ignore -->
 | Key | Description |
 | --- | --- |
-| `kyselyVersion` | *Optional.* Version of Kysely with which to compare code, or branch name. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
+| `kyselyRelease` | *Optional.* Release version of Kysely with which to compare code. Overrides determination by semantic versioning, but is itself overridden by the `--release` command line option. |
 | `localSyncDirs` | *Required.* An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
 
 The `load-kysely-tests` command uses the following configuration keys:
@@ -66,7 +66,7 @@ The `load-kysely-tests` command uses the following configuration keys:
 <!-- prettier-ignore -->
 | Key | Description |
 | --- | --- |
-| `kyselyVersion` | *Optional.* Version of Kysely from which to pull test files, or branch name. Overrides determination by semantic versioning, but is itself overridden by the `--version` command line option. |
+| `kyselyRelease` | *Optional.* Release version of Kysely from which to pull test files. Overrides determination by semantic versioning, but is itself overridden by the `--release` command line option. |
 | `kyselyTestDir` | *Required.* Directory relative to the Kysely root where the desired test files are found. (e.g. `test/node/src`). |
 | `kyselyTestFiles` | *Required.* Object mapping file names to arrays of test names. The test names are the names of the tests that are to be skipped. |
 | `downloadDir` | *Required.* This is the directory into which the test files are to be downloaded from Kysely for local transpilation by TypeScript. The command deletes this directory prior to running. Expressed relative to the current working directory. |
@@ -103,12 +103,12 @@ npx check-synced-code --config=test/test-sync.json
 npx load-kysely-tests --config=config-files/config-file-1.json
 ```
 
-You can also use the `--version` option to specify a particular version or branch of Kysely against which to sync the data, overriding the configuration. Examples:
+You can also use the `--release` option to specify a particular release Kysely against which to sync the data, overriding the configuration. Examples:
 
 ```bash
-npx check-synced-code --version=some-branch
+npx check-synced-code --release=0.24.2
 
-npx load-kysely-tests --version=0.23.0
+npx load-kysely-tests --release=0.23.0
 ```
 
 You'll use separate configuration files for running tests from different Kysely directories.
@@ -223,8 +223,8 @@ Now you can run `npx load-kysely-tests` to download the test files into the down
 
 When you run `check-synced-code` or `load-kysely-tests`, the command needs to decide which version of Kysely to sync with. The version is selected by the following procedure:
 
-1. If the command includes the `--version` option, this is the version used.
-2. Otherwise, if the configuration file includes the `kyselyVersion` key, this is the version used.
+1. If the command includes the `--release` option, this is the version used.
+2. Otherwise, if the configuration file includes the `kyselyRelease` key, this is the version used.
 3. Otherwise, the command looks up the version of Kysely that's installed, according to `package.json`. It then identifies the most recent Kysely release that is compatible with this version according to semantic versioning.
 
 Upon selecting a version, synced code blocks are compared with this release having this version, and test files are downloaded from this release having this version.

@@ -35,7 +35,7 @@ export async function getBaseDownloadUrl(
   // The following code is not tested because its behavior varies
   // according the installed project's package.json file. However,
   // each of the function is individually tested.
-  let syncVersion = config.kyselyVersion;
+  let syncVersion = config.kyselyRelease;
   if (!syncVersion) {
     const maxVersions = getMaxVersions(currentVersion);
     syncVersion = await getClosestKyselyVersion(maxVersions);

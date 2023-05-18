@@ -4,7 +4,7 @@ import * as path from 'path';
 export const CONFIG_FILE_NAME = 'test-sync.json';
 
 const CONFIG_ARG = '--config=';
-const VERSION_ARG = '--version=';
+const VERSION_ARG = '--release=';
 const DEFAULT_BASE_SYNC_REF_URL = 'https://github.com/kysely-org/kysely/blob/';
 const DEFAULT_BASE_SYNC_RAW_URL =
   'https://raw.githubusercontent.com/kysely-org/kysely/';
@@ -14,7 +14,7 @@ let config: TestSyncConfig;
 export interface TestSyncConfig {
   __baseSyncRefUrl: string;
   __baseSyncRawUrl: string;
-  kyselyVersion?: string;
+  kyselyRelease?: string;
   localSyncDirs: string[];
   kyselyTestDir: string;
   kyselyTestFiles: Record<string, string[]>;
@@ -82,12 +82,10 @@ export async function getConfig(configFile?: string): Promise<TestSyncConfig> {
       arg.startsWith(VERSION_ARG)
     );
     if (versionArg[0]) {
-      config.kyselyVersion = versionArg[0].substring(VERSION_ARG.length);
-      if (
-        !/(^\d+\.\d+\.\d+)|([a-zA-Z][-a-zA-Z0-9]*)$/.test(config.kyselyVersion)
-      ) {
+      config.kyselyRelease = versionArg[0].substring(VERSION_ARG.length);
+      if (!/^\d+\.\d+\.\d+$/.test(config.kyselyRelease)) {
         throw new InvalidConfigException(
-          `Invalid version or branch: ${config.kyselyVersion}`
+          `Invalid release version: ${config.kyselyRelease}`
         );
       }
     }
