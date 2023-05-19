@@ -1,6 +1,6 @@
 # kysely-test-sync
 
-Utility for keeping code and tests in sync with the Kysely repo
+Utility for running Kysely dialects/extensions against Kysely's test suite
 
 ## Introduction
 
