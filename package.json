@@ -1,6 +1,6 @@
 {
   "name": "kysely-test-sync",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "author": "Joseph T. Lapp <arachnojoe@gmail.com>",
   "license": "MIT",
   "description": "Utility for running Kysely dialects/extensions against Kysely's test suite",

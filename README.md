@@ -53,7 +53,7 @@ The utility requires Node.js v18 or higher.
 
 The default configuration file is `test-sync.json`, and it is expected to be found in the current working directory at the time a command is run.
 
-The `check-synced-code` command only uses the configuration key:
+The `check-synced-code` command uses these configuration keys:
 
 <!-- prettier-ignore -->
 | Key | Description |
@@ -61,7 +61,7 @@ The `check-synced-code` command only uses the configuration key:
 | `kyselyRelease` | *Optional.* Release version of Kysely with which to compare code. Overrides determination by semantic versioning, but is itself overridden by the `--release` command line option. |
 | `localSyncDirs` | *Required.* An array of the directories containing code having code blocks that are to be synced with Kysely. Includes all nested directories. |
 
-The `load-kysely-tests` command uses the following configuration keys:
+The `load-kysely-tests` command uses these configuration keys:
 
 <!-- prettier-ignore -->
 | Key | Description |
