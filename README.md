@@ -76,8 +76,8 @@ Here is an example `test-sync.json` from the [`kysely-pg-client`](https://github
 
 ```json
 {
-  "localSyncDirs": ["src", "test/node/src"],
-  "kyselyTestDir": "test/current/src",
+  "localSyncDirs": ["src", "test/current/src"],
+  "kyselyTestDir": "test/node/src",
   "kyselyTestFiles": {
     "delete.test.ts": [],
     "execute.test.ts": [],
