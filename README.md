@@ -77,7 +77,7 @@ Here is an example `test-sync.json` from the [`kysely-pg-client`](https://github
 ```json
 {
   "localSyncDirs": ["src", "test/node/src"],
-  "kyselyTestDir": "test/node/src",
+  "kyselyTestDir": "test/current/src",
   "kyselyTestFiles": {
     "delete.test.ts": [],
     "execute.test.ts": [],
@@ -90,7 +90,7 @@ Here is an example `test-sync.json` from the [`kysely-pg-client`](https://github
     "transaction.test.ts": ["should run multiple transactions in parallel"],
     "update.test.ts": []
   },
-  "downloadDir": "test/node/src/downloads",
+  "downloadDir": "test/current/src/downloads",
   "customSetupFile": "../custom-test-setup.js"
 }
 ```
