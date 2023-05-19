@@ -164,7 +164,7 @@ Here is the structure I have working with [`kysely-pg-client`](https://github.co
 ```
 test-sync.json
 test/
-    node/
+    current/
         dist/  <-- output of test build
         src/
             downloads/  <-- directory into which Kysely tests download
@@ -172,6 +172,8 @@ test/
         custom-select.test.ts
         custom-transaction.test.ts
 ```
+
+`current/` is the directory for the tests with which the code was most recently integrated. There is also a `latest/` directory for dynamically testing the code against more recent versions of Kysely.
 
 The files `custom-select.test.ts` and `custom-transaction.test.ts` contain tests I modified from Kysely's `select.test.ts` and `transaction.test.ts` files. You don't have to prefix these files with `custom-`; I only did so to make it clear when I'm not looking at the downloaded `select.test.ts` and `transaction.test.ts`, whose tests I'm also running.
 
